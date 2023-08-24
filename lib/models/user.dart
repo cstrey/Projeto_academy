@@ -1,9 +1,14 @@
 class User {
-  String? id;
-  String? cnpj;
-  String? password;
-  String? name;
+  int? id;
+  String cnpj;
+  String password;
+  String name;
   String? autonomy;
 
-  User({this.cnpj, this.password, this.name, this.autonomy, this.id});
+  User(
+      {required this.cnpj,
+      required this.password,
+      required this.name,
+      this.autonomy,
+      this.id});
 }

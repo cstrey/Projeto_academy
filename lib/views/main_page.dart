@@ -28,11 +28,7 @@ class MainPage extends StatelessWidget {
         ),
         title: Text(title),
       ),
-      drawer: const DrawerMenu(
-        cnpj: '',
-        profilePicture: '',
-        shopName: '',
-      ),
+      drawer: const DrawerMenu(shopName: '', cnpj: '', profilePicture: ''),
       body: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [],

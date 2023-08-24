@@ -5,25 +5,29 @@ import '../main.dart';
 import '../models/user.dart';
 
 class UserState extends ChangeNotifier {
-  UserState() {
-    load();
-  }
-
   final controller = UserController();
 
   final _controllerUser = TextEditingController();
+  final _controllerAutonomy = TextEditingController();
+  final _controllerName = TextEditingController();
+  final _controllerCnpj = TextEditingController();
+  final _controllerPassword = TextEditingController();
   final _listUser = <User>[];
 
   TextEditingController get controllerUser => _controllerUser;
+  TextEditingController get controllerAutonomy => _controllerAutonomy;
+  TextEditingController get controllerName => _controllerName;
+  TextEditingController get controllerCnpj => _controllerCnpj;
+  TextEditingController get controllerPassword => _controllerPassword;
 
   List<User> get listUser => _listUser;
 
   Future<void> insert() async {
     final person = User(
-      autonomy: controllerUser.text,
-      name: controllerUser.text,
-      cnpj: controllerUser.text,
-      password: controllerUser.text,
+      autonomy: controllerAutonomy.text,
+      name: controllerName.text,
+      cnpj: controllerCnpj.text,
+      password: controllerPassword.text,
     );
 
     await controller.insert(person);
@@ -67,7 +71,7 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
               ),
-              title: const Text('Login'),
+              title: const Text('Registre Sua Loja'),
               actions: [
                 IconButton(
                   onPressed: () => state.toggleTheme(),
@@ -85,27 +89,37 @@ class RegisterPage extends StatelessWidget {
                   child: Column(
                     children: [
                       TextFormField(
-                        controller: stateUser.controllerUser,
+                        controller: stateUser.controllerName,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          labelText: 'Nome',
+                          labelText: 'Nome da loja',
                         ),
                       ),
                       TextFormField(
-                        controller: stateUser.controllerUser,
-                        keyboardType: TextInputType.emailAddress,
+                        controller: stateUser.controllerCnpj,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          labelText: 'Email',
+                          labelText: 'CNPJ',
                         ),
                       ),
                       TextFormField(
-                        controller: stateUser.controllerUser,
+                        controller: stateUser.controllerPassword,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          labelText: 'Senha',
+                        ),
+                      ),
+                      TextFormField(
+                        controller: stateUser.controllerPassword,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -115,8 +129,9 @@ class RegisterPage extends StatelessWidget {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, "/");
+                        onPressed: () async {
+                          await stateUser.insert();
+                          Navigator.pushReplacementNamed(context, "/");
                         },
                         child: const Text('Entrar'),
                       ),

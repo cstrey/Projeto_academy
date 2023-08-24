@@ -8,11 +8,12 @@ class DrawerMenu extends StatelessWidget {
   final String cnpj;
   final String profilePicture;
 
-  const DrawerMenu(
-      {super.key,
-      required this.shopName,
-      required this.cnpj,
-      required this.profilePicture});
+  const DrawerMenu({
+    super.key,
+    required this.shopName,
+    required this.cnpj,
+    required this.profilePicture,
+  });
 
   Text showTittle(String texto) {
     return Text(
@@ -28,9 +29,8 @@ class DrawerMenu extends StatelessWidget {
       child: Center(
         child: ListView(
           children: [
-            //informações do usuario
-            UserAccountsDrawerHeader(
-              decoration: const BoxDecoration(
+            const DrawerHeader(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,
@@ -40,49 +40,64 @@ class DrawerMenu extends StatelessWidget {
                   ],
                 ),
               ),
-              accountName: Text(shopName),
-              accountEmail: Text(cnpj),
-              currentAccountPicture: CircleAvatar(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(40),
-                  child: const Icon(Icons.account_circle),
-                ),
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.person,
+                    size: 80,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    "Cauan",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    "21213",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
-            //home
             ListTile(
               title: showTittle('Home'),
               subtitle: const Text('Pagina Inicial'),
               leading: const Icon(Icons.home),
               iconColor: mainColor,
-
-              //ir para a Home
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, "/");
+              },
             ),
-
-            //Gerencia
             ListTile(
               title: showTittle('Gerenciar'),
-              subtitle: const Text('Gerenciar Vendas'),
-              leading: const Icon(Icons.sell),
+              subtitle: const Text('Gerenciar Usuários'),
+              leading: const Icon(Icons.person_2),
               iconColor: mainColor,
-
-              //ir para a gerencia de vendas
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, "/users");
+              },
             ),
-
-            //configurações
             ListTile(
               title: showTittle('Configurações'),
               subtitle: const Text('Fazer ajustes na conta'),
               leading: const Icon(Icons.brightness_7),
               iconColor: mainColor,
-
-              //ir para a Configuraçoes
               onTap: () {},
             ),
+            ListTile(
+              title: showTittle('Login'),
+              subtitle: const Text('Entrar na Conta'),
+              leading: const Icon(Icons.login),
+              iconColor: mainColor,
 
-            //logout
+              //ir para a pagina inicial
+              onTap: () {
+                Navigator.pushNamed(context, "/login");
+              },
+            ),
             ListTile(
               title: showTittle('Logout'),
               subtitle: const Text('Sair do aplicativo'),
@@ -90,7 +105,9 @@ class DrawerMenu extends StatelessWidget {
               iconColor: mainColor,
 
               //ir para a pagina inicial
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, "/register");
+              },
             ),
             IconButton(
               alignment: Alignment.bottomLeft,
