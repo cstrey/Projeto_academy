@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:projeto_lince/main.dart';
 import 'package:provider/provider.dart';
 
+import '../../controller/theme_controller.dart';
+
 class DrawerMenu extends StatelessWidget {
   //dados que vem do banco de dados
   final String shopName;

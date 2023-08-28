@@ -23,7 +23,7 @@ class TableUser {
     $id       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     $autonomy TEXT NOT NULL,
     $name     TEXT NOT NULL,
-    $cnpj     TEXT NOT NULL,
+    $cnpj     INTEGER NOT NULL,
     $password TEXT NOT NULL
     );
   ''';

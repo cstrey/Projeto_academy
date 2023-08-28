@@ -1,54 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_lince/controller/database.dart';
 import 'package:provider/provider.dart';
-import '../main.dart';
-import '../models/user.dart';
-
-class UserState extends ChangeNotifier {
-  final controller = UserController();
-
-  final _controllerUser = TextEditingController();
-  final _controllerAutonomy = TextEditingController();
-  final _controllerName = TextEditingController();
-  final _controllerCnpj = TextEditingController();
-  final _controllerPassword = TextEditingController();
-  final _listUser = <User>[];
-
-  TextEditingController get controllerUser => _controllerUser;
-  TextEditingController get controllerAutonomy => _controllerAutonomy;
-  TextEditingController get controllerName => _controllerName;
-  TextEditingController get controllerCnpj => _controllerCnpj;
-  TextEditingController get controllerPassword => _controllerPassword;
-
-  List<User> get listUser => _listUser;
-
-  Future<void> insert() async {
-    final person = User(
-      autonomy: controllerAutonomy.text,
-      name: controllerName.text,
-      cnpj: controllerCnpj.text,
-      password: controllerPassword.text,
-    );
-
-    await controller.insert(person);
-    await load();
-
-    controllerUser.clear();
-    notifyListeners();
-  }
-
-  Future<void> load() async {
-    final list = await controller.select();
-
-    listUser.clear();
-    listUser.addAll(list);
-
-    notifyListeners();
-  }
-}
+import '../controller/db_controller.dart';
+import '../controller/theme_controller.dart';
 
 class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+  RegisterPage({super.key});
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -81,14 +39,16 @@ class RegisterPage extends StatelessWidget {
                 ),
               ],
             ),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      TextFormField(
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
                         controller: stateUser.controllerName,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
@@ -97,8 +57,19 @@ class RegisterPage extends StatelessWidget {
                           ),
                           labelText: 'Nome da loja',
                         ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, informe um nome válido.';
+                          } else if (value.length > 120) {
+                            return 'Nome deve ter menos de 120 caracteres';
+                          }
+                          return null;
+                        },
                       ),
-                      TextFormField(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
                         controller: stateUser.controllerCnpj,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -107,38 +78,48 @@ class RegisterPage extends StatelessWidget {
                           ),
                           labelText: 'CNPJ',
                         ),
-                      ),
-                      TextFormField(
-                        controller: stateUser.controllerPassword,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          labelText: 'Senha',
-                        ),
-                      ),
-                      TextFormField(
-                        controller: stateUser.controllerPassword,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          labelText: 'Senha',
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          await stateUser.insert();
-                          Navigator.pushReplacementNamed(context, "/");
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, informe um CNPJ válido.';
+                          } else if (value.length < 14 || value.length > 14) {
+                            return 'cnpj deve conter 14 digitos';
+                          }
+                          return null;
                         },
-                        child: const Text('Entrar'),
                       ),
-                    ],
-                  ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: stateUser.controllerPassword,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          labelText: 'Senha',
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, informe uma senha válida.';
+                          } else if (value.length > 12) {
+                            return 'senha deve  ter menos de 12 caracteres';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          await stateUser.insert();
+                        }
+                      },
+                      child: const Text('Cadastrar'),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           );
         },

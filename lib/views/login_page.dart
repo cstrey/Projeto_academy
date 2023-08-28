@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../main.dart';
+import '../controller/theme_controller.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -70,7 +69,7 @@ class LoginPage extends StatelessWidget {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Insira uma senha";
-                  } else if (value.toString() != "admin") {
+                  } else if (value.toString() != "1234") {
                     return "Senha inválida";
                   }
                   return null;
