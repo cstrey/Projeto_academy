@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_lince/views/login_page.dart';
-import 'package:projeto_lince/views/register_page.dart';
-import 'package:projeto_lince/views/main_page.dart';
-import 'package:projeto_lince/views/users.dart';
 import 'package:provider/provider.dart';
-
 import 'controller/theme_controller.dart';
+import 'views/login_page.dart';
+import 'views/main_page.dart';
+import 'views/register_page.dart';
+import 'views/users.dart';
 
 const Color mainColor = Color.fromARGB(255, 57, 57, 196);
 
@@ -25,13 +24,13 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: state.ligthMode ? ThemeData.light() : ThemeData.dark(),
-            initialRoute: "/register",
+            initialRoute: '/',
             routes: {
-              "/": (context) => const MainPage(title: "Anderson Automóveis"),
-              "/login": (context) => LoginPage(),
-              "/register": (context) => RegisterPage(),
-              "/users": (context) =>
-                  const ShowUsers(title: "Anderson Automóveis"),
+              '/': (context) => const MainPage(title: 'Anderson Automóveis'),
+              '/login': (context) => LoginPage(),
+              '/register': (context) => RegisterPage(),
+              '/users': (context) =>
+                  const ShowUsers(title: 'Anderson Automóveis'),
             },
           );
         },

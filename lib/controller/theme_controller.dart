@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const appThemeModeKey = "appThemeMode";
+const appThemeModeKey = 'appThemeMode';
 
 class MyState extends ChangeNotifier {
   MyState() {

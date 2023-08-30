@@ -36,13 +36,16 @@ class ShowUsers extends StatelessWidget {
             ),
             body: ListView.builder(
               itemCount: stateUser.listUser.length,
-              itemBuilder: (BuildContext context, int index) {
+              itemBuilder: (context, index) {
                 final user = stateUser.listUser[index];
-                return ListTile(title: Text(user.name));
+                return ListTile(
+                  leading: Text(user.id.toString()),
+                  title: Text(user.name),
+                  subtitle: Text(user.cnpj.toString()),
+                );
               },
             ),
-            drawer:
-                const DrawerMenu(shopName: '', cnpj: '', profilePicture: ''),
+            drawer: const DrawerMenu(),
           );
         },
       ),

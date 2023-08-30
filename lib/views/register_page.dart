@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controller/db_controller.dart';
 import '../controller/theme_controller.dart';
+import 'permanence/menu.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
@@ -32,13 +33,14 @@ class RegisterPage extends StatelessWidget {
               title: const Text('Registre Sua Loja'),
               actions: [
                 IconButton(
-                  onPressed: () => state.toggleTheme(),
+                  onPressed: state.toggleTheme,
                   icon: Icon(
                     state.ligthMode ? Icons.dark_mode : Icons.light_mode,
                   ),
                 ),
               ],
             ),
+            drawer: const DrawerMenu(),
             body: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Form(
@@ -105,6 +107,22 @@ class RegisterPage extends StatelessWidget {
                           } else if (value.length > 12) {
                             return 'senha deve  ter menos de 12 caracteres';
                           }
+                          return null;
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: stateUser.controllerAutonomy,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          labelText: 'Autonomia',
+                        ),
+                        validator: (value) {
                           return null;
                         },
                       ),

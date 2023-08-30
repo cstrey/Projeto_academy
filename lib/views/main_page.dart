@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_lince/views/permanence/menu.dart';
+import 'permanence/menu.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({
@@ -28,7 +28,7 @@ class MainPage extends StatelessWidget {
         ),
         title: Text(title),
       ),
-      drawer: const DrawerMenu(shopName: '', cnpj: '', profilePicture: ''),
+      drawer: const DrawerMenu(),
       body: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [],

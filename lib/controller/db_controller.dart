@@ -3,6 +3,12 @@ import '../models/user.dart';
 import 'database.dart';
 
 class UserState extends ChangeNotifier {
+  UserState() {
+    loadData();
+  }
+
+  String shopName = '';
+
   final controller = UserController();
 
   final _controllerUser = TextEditingController();
@@ -24,23 +30,47 @@ class UserState extends ChangeNotifier {
     final person = User(
       autonomy: controllerAutonomy.text,
       name: controllerName.text,
-      cnpj: controllerCnpj.text,
+      cnpj: int.parse(controllerCnpj.text),
       password: controllerPassword.text,
     );
 
     await controller.insert(person);
-    await load();
 
     controllerUser.clear();
     notifyListeners();
   }
 
-  Future<void> load() async {
+  Future<void> loadData() async {
     final list = await controller.select();
 
-    listUser.clear();
-    listUser.addAll(list);
+    listUser
+      ..clear()
+      ..addAll(list);
 
     notifyListeners();
+  }
+
+  Future<dynamic> getUser(String username) async {
+    final database = await getDatabase();
+    final List<Map<String, dynamic>> result = await database.query(
+      TableUser.tableName,
+      where: '${TableUser.cnpj} = ?',
+      whereArgs: [username],
+    );
+
+    if (result.isNotEmpty) {
+      final item = result.first;
+      shopName = item[TableUser.name];
+
+      return User(
+        id: item[TableUser.id],
+        cnpj: item[TableUser.cnpj],
+        name: item[TableUser.name],
+        password: item[TableUser.password],
+      );
+    }
+
+    notifyListeners();
+    return null;
   }
 }

@@ -10,8 +10,8 @@ Future<Database> getDatabase() async {
 
   return openDatabase(
     path,
-    onCreate: (Database db, int version) async {
-      db.execute(TableUser.createTable);
+    onCreate: (db, version) async {
+      await db.execute(TableUser.createTable);
     },
     version: 1,
   );
@@ -25,7 +25,7 @@ class TableUser {
     $name     TEXT NOT NULL,
     $cnpj     INTEGER NOT NULL,
     $password TEXT NOT NULL
-    );
+    )
   ''';
 
   static const String tableName = 'user';
@@ -72,14 +72,14 @@ class UserController {
 
     var list = <User>[];
 
-    for (final index in result) {
+    for (final it in result) {
       list.add(
         User(
-          id: index[TableUser.id],
-          autonomy: index[TableUser.autonomy],
-          name: index[TableUser.name],
-          cnpj: index[TableUser.cnpj],
-          password: index[TableUser.password],
+          id: it[TableUser.id],
+          autonomy: it[TableUser.autonomy],
+          name: it[TableUser.name],
+          cnpj: it[TableUser.cnpj],
+          password: it[TableUser.password],
         ),
       );
     }
