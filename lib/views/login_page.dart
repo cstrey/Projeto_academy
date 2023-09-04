@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controller/db_controller.dart';
 import '../controller/theme_controller.dart';
+import 'permanence/form.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
-
-  final _formKey = GlobalKey<FormState>();
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,59 +40,45 @@ class LoginPage extends StatelessWidget {
               ],
             ),
             body: Form(
-              key: _formKey,
+              key: stateUser.formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        labelText: 'Usuário',
-                      ),
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty ||
-                            value.length != 14) {
-                          return 'Por favor, informe um CNPJ válido.';
-                        }
-                        return null;
-                      },
-                    ),
+                  FormPattern(
+                    labelText: 'CNPJ do Usuário',
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          value.length != 14) {
+                        return 'Por favor, informe um CNPJ válido.';
+                      }
+                      return null;
+                    },
+                    controler: stateUser.controllerCnpj,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        labelText: 'Senha',
-                      ),
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty ||
-                            value.length < 4) {
-                          return 'Por favor, informe uma senha válida.';
-                        }
-                        return null;
-                      },
-                      obscureText: true,
-                    ),
+                  FormPattern(
+                    labelText: 'Senha',
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value == null || value.isEmpty || value.length < 4) {
+                        return 'Por favor, informe uma senha válida.';
+                      }
+                      return null;
+                    },
+                    obscureText: true,
+                    controler: stateUser.controllerPassword,
                   ),
                   ElevatedButton(
+                    child: const Text('Entrar'),
                     onPressed: () async {
-                      final shopCnpj = stateUser.controllerCnpj.text;
+                      final userCnpj = stateUser.controllerCnpj.text;
                       final password = stateUser.controllerPassword.text;
-                      final userLogin = await stateUser.getUser(shopCnpj);
-                      if (_formKey.currentState!.validate()) {
+                      final userLogin = await stateUser.getUser(userCnpj);
+                      if (stateUser.formKey.currentState!.validate()) {
                         if (userLogin != null &&
                             userLogin.password == password) {
+                          // ignore: use_build_context_synchronously
                           await Navigator.of(context).pushReplacementNamed('/');
                         } else {
                           // ignore: use_build_context_synchronously
@@ -102,8 +87,9 @@ class LoginPage extends StatelessWidget {
                             builder: (context) {
                               return AlertDialog(
                                 title: const Text('Erro de Login'),
-                                content:
-                                    const Text('CNPJ ou senha incorretos.'),
+                                content: const Text(
+                                  'informações podem estar incorretas',
+                                ),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
@@ -118,7 +104,6 @@ class LoginPage extends StatelessWidget {
                         }
                       }
                     },
-                    child: const Text('Entrar'),
                   ),
                 ],
               ),

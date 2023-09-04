@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controller/db_controller.dart';
 import '../controller/theme_controller.dart';
+import 'permanence/form.dart';
 import 'permanence/menu.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -48,84 +49,52 @@ class RegisterPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: stateUser.controllerName,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          labelText: 'Nome da loja',
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor, informe um nome válido.';
-                          } else if (value.length > 120) {
-                            return 'Nome deve ter menos de 120 caracteres';
-                          }
-                          return null;
-                        },
-                      ),
+                    FormPattern(
+                      controler: stateUser.controllerName,
+                      labelText: 'Nome da Loja',
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, informe um nome válido.';
+                        } else if (value.length > 120) {
+                          return 'Nome deve ter menos de 120 caracteres';
+                        }
+                        return null;
+                      },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: stateUser.controllerCnpj,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          labelText: 'CNPJ',
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor, informe um CNPJ válido.';
-                          } else if (value.length < 14 || value.length > 14) {
-                            return 'cnpj deve conter 14 digitos';
-                          }
-                          return null;
-                        },
-                      ),
+                    FormPattern(
+                      controler: stateUser.controllerCnpj,
+                      labelText: 'CNPJ',
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, informe um CNPJ válido.';
+                        } else if (value.length < 14 || value.length > 14) {
+                          return 'cnpj deve conter 14 digitos';
+                        }
+                        return null;
+                      },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: stateUser.controllerPassword,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          labelText: 'Senha',
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor, informe uma senha válida.';
-                          } else if (value.length > 12) {
-                            return 'senha deve  ter menos de 12 caracteres';
-                          }
-                          return null;
-                        },
-                      ),
+                    FormPattern(
+                      controler: stateUser.controllerPassword,
+                      labelText: 'Senha',
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, informe uma senha válida.';
+                        } else if (value.length > 12) {
+                          return 'senha deve  ter menos de 12 caracteres';
+                        }
+                        return null;
+                      },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: stateUser.controllerAutonomy,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          labelText: 'Autonomia',
-                        ),
-                        validator: (value) {
-                          return null;
-                        },
-                      ),
+                    FormPattern(
+                      controler: stateUser.controllerAutonomy,
+                      labelText: 'Autonomia',
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        return null;
+                      },
                     ),
                     ElevatedButton(
                       onPressed: () async {

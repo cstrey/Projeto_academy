@@ -6,10 +6,9 @@ import 'permanence/menu.dart';
 class ShowUsers extends StatelessWidget {
   const ShowUsers({
     super.key,
-    required this.title,
   });
 
-  final String title;
+  final String title = 'Anderson Automóveis';
 
   @override
   Widget build(BuildContext context) {

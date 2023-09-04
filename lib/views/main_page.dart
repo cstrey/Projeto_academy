@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'carousel.dart';
 import 'permanence/menu.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({
     super.key,
-    required this.title,
   });
 
-  final String title;
+  final String title = 'Anderson Automóveis';
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +30,9 @@ class MainPage extends StatelessWidget {
       ),
       drawer: const DrawerMenu(),
       body: const Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [],
+        children: [
+          Carousel(),
+        ],
       ),
     );
   }

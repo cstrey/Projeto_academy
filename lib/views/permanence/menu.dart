@@ -25,8 +25,8 @@ class DrawerMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider<UserState>(create: (_) => UserState());
     final state = Provider.of<MyState>(context);
-
     return ChangeNotifierProvider(
       create: (context) => UserState(),
       child: Consumer<UserState>(
@@ -35,8 +35,8 @@ class DrawerMenu extends StatelessWidget {
             child: Center(
               child: ListView(
                 children: [
-                  const DrawerHeader(
-                    decoration: BoxDecoration(
+                  DrawerHeader(
+                    decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topRight,
                         end: Alignment.bottomLeft,
@@ -48,20 +48,20 @@ class DrawerMenu extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.person,
                           size: 80,
                           color: Colors.white,
                         ),
                         Text(
-                          'admin',
-                          style: TextStyle(
+                          UserState().userName,
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
                         Text(
-                          'admin',
-                          style: TextStyle(
+                          UserState().userCnpj.toString(),
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
@@ -105,15 +105,20 @@ class DrawerMenu extends StatelessWidget {
                     },
                   ),
                   ListTile(
+                    title: showTittle('Register'),
+                    subtitle: const Text('Registrar um usuário'),
+                    leading: const Icon(Icons.app_registration),
+                    iconColor: mainColor,
+                    onTap: () {
+                      Navigator.pushNamed(context, '/register');
+                    },
+                  ),
+                  ListTile(
                     title: showTittle('Logout'),
                     subtitle: const Text('Sair do aplicativo'),
                     leading: const Icon(Icons.logout),
                     iconColor: mainColor,
-
-                    //ir para a pagina inicial
-                    onTap: () {
-                      Navigator.pushNamed(context, '/register');
-                    },
+                    onTap: () {},
                   ),
                   IconButton(
                     alignment: Alignment.bottomLeft,

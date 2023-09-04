@@ -7,10 +7,11 @@ class UserState extends ChangeNotifier {
     loadData();
   }
 
-  String shopName = '';
+  String userName = 'nome';
+  int? userCnpj;
 
   final controller = UserController();
-
+  final formKey = GlobalKey<FormState>();
   final _controllerUser = TextEditingController();
   final _controllerAutonomy = TextEditingController();
   final _controllerName = TextEditingController();
@@ -54,13 +55,12 @@ class UserState extends ChangeNotifier {
     final database = await getDatabase();
     final List<Map<String, dynamic>> result = await database.query(
       TableUser.tableName,
-      where: '${TableUser.cnpj} = ?',
-      whereArgs: [username],
     );
 
     if (result.isNotEmpty) {
       final item = result.first;
-      shopName = item[TableUser.name];
+      userName = item[TableUser.name];
+      userCnpj = item[TableUser.cnpj];
 
       return User(
         id: item[TableUser.id],

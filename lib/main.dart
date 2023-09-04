@@ -26,11 +26,10 @@ class MyApp extends StatelessWidget {
             theme: state.ligthMode ? ThemeData.light() : ThemeData.dark(),
             initialRoute: '/',
             routes: {
-              '/': (context) => const MainPage(title: 'Anderson Automóveis'),
-              '/login': (context) => LoginPage(),
+              '/': (context) => const MainPage(),
+              '/login': (context) => const LoginPage(),
               '/register': (context) => RegisterPage(),
-              '/users': (context) =>
-                  const ShowUsers(title: 'Anderson Automóveis'),
+              '/users': (context) => const ShowUsers(),
             },
           );
         },
