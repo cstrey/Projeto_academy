@@ -4,7 +4,7 @@ import 'controller/theme_controller.dart';
 import 'views/login_page.dart';
 import 'views/main_page.dart';
 import 'views/register_page.dart';
-import 'views/users.dart';
+import 'views/show_users.dart';
 
 const Color mainColor = Color.fromARGB(255, 57, 57, 196);
 

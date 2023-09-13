@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controller/db_controller.dart';
-import 'permanence/menu.dart';
+import 'permanence/menu_drawer.dart';
+import 'register_page.dart';
 
 class ShowUsers extends StatelessWidget {
   const ShowUsers({
@@ -38,9 +39,40 @@ class ShowUsers extends StatelessWidget {
               itemBuilder: (context, index) {
                 final user = stateUser.listUser[index];
                 return ListTile(
-                  leading: Text(user.id.toString()),
                   title: Text(user.name),
                   subtitle: Text(user.cnpj.toString()),
+                  trailing: IntrinsicWidth(
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () async {
+                            stateUser.updateUser(user);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ChangeNotifierProvider.value(
+                                  value: stateUser,
+                                  child: RegisterPage(),
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.edit,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            await stateUser.delete(user);
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 );
               },
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'carousel.dart';
-import 'permanence/menu.dart';
+import 'permanence/carousel.dart';
+import 'permanence/menu_drawer.dart';
+import 'permanence/text_apresentation.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({
@@ -29,9 +30,26 @@ class MainPage extends StatelessWidget {
         title: Text(title),
       ),
       drawer: const DrawerMenu(),
-      body: const Column(
+      body: Column(
         children: [
-          Carousel(),
+          const Carousel(),
+          Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                gradient: const LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                    Color(0xff00456A),
+                    Color(0xff051937),
+                  ],
+                ),
+              ),
+              child: const TextPattern(),
+            ),
+          ),
         ],
       ),
     );

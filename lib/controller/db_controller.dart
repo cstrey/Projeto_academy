@@ -7,9 +7,6 @@ class UserState extends ChangeNotifier {
     loadData();
   }
 
-  String userName = 'nome';
-  int? userCnpj;
-
   final controller = UserController();
   final formKey = GlobalKey<FormState>();
   final _controllerUser = TextEditingController();
@@ -17,6 +14,7 @@ class UserState extends ChangeNotifier {
   final _controllerName = TextEditingController();
   final _controllerCnpj = TextEditingController();
   final _controllerPassword = TextEditingController();
+  User? _oldUser;
   final _listUser = <User>[];
 
   TextEditingController get controllerUser => _controllerUser;
@@ -24,7 +22,7 @@ class UserState extends ChangeNotifier {
   TextEditingController get controllerName => _controllerName;
   TextEditingController get controllerCnpj => _controllerCnpj;
   TextEditingController get controllerPassword => _controllerPassword;
-
+  User? get oldUser => _oldUser;
   List<User> get listUser => _listUser;
 
   Future<void> insert() async {
@@ -37,7 +35,10 @@ class UserState extends ChangeNotifier {
 
     await controller.insert(person);
 
-    controllerUser.clear();
+    controllerAutonomy.clear();
+    controllerName.clear();
+    controllerCnpj.clear();
+    controllerPassword.clear();
     notifyListeners();
   }
 
@@ -59,8 +60,6 @@ class UserState extends ChangeNotifier {
 
     if (result.isNotEmpty) {
       final item = result.first;
-      userName = item[TableUser.name];
-      userCnpj = item[TableUser.cnpj];
 
       return User(
         id: item[TableUser.id],
@@ -72,5 +71,40 @@ class UserState extends ChangeNotifier {
 
     notifyListeners();
     return null;
+  }
+
+  Future<void> delete(User person) async {
+    await controller.delete(person);
+    await loadData();
+  }
+
+  void updateUser(User person) {
+    _controllerName.text = person.name;
+    _controllerCnpj.text = person.cnpj.toString();
+
+    _oldUser = User(
+        name: person.name,
+        cnpj: person.cnpj,
+        password: person.password,
+        autonomy: person.autonomy,
+        id: person.id);
+  }
+
+  Future<void> update() async {
+    final updateUser = User(
+        id: _oldUser?.id,
+        name: controllerName.text,
+        password: controllerPassword.text,
+        autonomy: controllerAutonomy.text,
+        cnpj: int.parse(controllerCnpj.text));
+
+    await controller.update(updateUser);
+    _oldUser = null;
+    _controllerPassword.clear();
+    _controllerAutonomy.clear();
+    _controllerName.clear();
+    _controllerCnpj.clear();
+
+    await loadData();
   }
 }

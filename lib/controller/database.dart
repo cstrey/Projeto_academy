@@ -5,7 +5,7 @@ import '../models/user.dart';
 Future<Database> getDatabase() async {
   final path = join(
     await getDatabasesPath(),
-    'users.db',
+    'user.db',
   );
 
   return openDatabase(
@@ -85,5 +85,37 @@ class UserController {
     }
 
     return list;
+  }
+
+  Future<void> delete(User person) async {
+    final database = await getDatabase();
+
+    await database.transaction(
+      (tx) async {
+        final batch = tx.batch();
+
+        batch.delete(
+          TableUser.tableName,
+          where: '${TableUser.id} = ?',
+          whereArgs: [person.id],
+        );
+
+        await batch.commit();
+      },
+    );
+  }
+
+  Future<void> update(User person) async {
+    final database = await getDatabase();
+
+    final map = TableUser.toMap(person);
+
+    database.update(
+      TableUser.tableName,
+      map,
+      where: '${TableUser.id} = ?',
+      whereArgs: [person.id],
+    );
+    return;
   }
 }

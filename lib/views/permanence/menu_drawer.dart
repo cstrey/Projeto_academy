@@ -35,8 +35,8 @@ class DrawerMenu extends StatelessWidget {
             child: Center(
               child: ListView(
                 children: [
-                  DrawerHeader(
-                    decoration: const BoxDecoration(
+                  const DrawerHeader(
+                    decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topRight,
                         end: Alignment.bottomLeft,
@@ -48,20 +48,20 @@ class DrawerMenu extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.person,
                           size: 80,
                           color: Colors.white,
                         ),
                         Text(
-                          UserState().userName,
-                          style: const TextStyle(
+                          'usuario',
+                          style: TextStyle(
                             color: Colors.white,
                           ),
                         ),
                         Text(
-                          UserState().userCnpj.toString(),
-                          style: const TextStyle(
+                          'cnpj',
+                          style: TextStyle(
                             color: Colors.white,
                           ),
                         ),
@@ -94,18 +94,14 @@ class DrawerMenu extends StatelessWidget {
                     onTap: () {},
                   ),
                   ListTile(
-                    title: showTittle('Login'),
-                    subtitle: const Text('Entrar na Conta'),
-                    leading: const Icon(Icons.login),
+                    title: showTittle('Veículos'),
+                    subtitle: const Text('Registrar um Veículo'),
+                    leading: const Icon(Icons.car_repair),
                     iconColor: mainColor,
-
-                    //ir para a pagina inicial
-                    onTap: () {
-                      Navigator.pushNamed(context, '/login');
-                    },
+                    onTap: () {},
                   ),
                   ListTile(
-                    title: showTittle('Register'),
+                    title: showTittle('Usuários'),
                     subtitle: const Text('Registrar um usuário'),
                     leading: const Icon(Icons.app_registration),
                     iconColor: mainColor,
@@ -118,7 +114,9 @@ class DrawerMenu extends StatelessWidget {
                     subtitle: const Text('Sair do aplicativo'),
                     leading: const Icon(Icons.logout),
                     iconColor: mainColor,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
                   ),
                   IconButton(
                     alignment: Alignment.bottomLeft,

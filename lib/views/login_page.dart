@@ -78,29 +78,32 @@ class LoginPage extends StatelessWidget {
                       if (stateUser.formKey.currentState!.validate()) {
                         if (userLogin != null &&
                             userLogin.password == password) {
-                          // ignore: use_build_context_synchronously
-                          await Navigator.of(context).pushReplacementNamed('/');
+                          if (context.mounted) {
+                            await Navigator.of(context)
+                                .pushReplacementNamed('/');
+                          }
                         } else {
-                          // ignore: use_build_context_synchronously
-                          await showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Erro de Login'),
-                                content: const Text(
-                                  'informações podem estar incorretas',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('OK'),
+                          if (context.mounted) {
+                            await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Erro de Login'),
+                                  content: const Text(
+                                    'informações podem estar incorretas',
                                   ),
-                                ],
-                              );
-                            },
-                          );
+                                  actions: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
                         }
                       }
                     },
