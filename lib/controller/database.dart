@@ -1,5 +1,6 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import '../models/car.dart';
 import '../models/user.dart';
 
 Future<Database> getDatabase() async {
@@ -115,6 +116,124 @@ class UserController {
       map,
       where: '${TableUser.id} = ?',
       whereArgs: [person.id],
+    );
+    return;
+  }
+}
+
+class TableCars {
+  static const String createTable = '''
+    CREATE TABLE $tableName(
+      $id             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      $model          TEXT NOT NULL,
+      $plate          TEXT NOT NULL,
+      $brand          TEXT NOT NULL,
+      $builtYear      INTEGER NOT NULL,
+      $modelYear      INTEGER NOT NULL,
+      $photo          TEXT NOT NULL,
+      $pricePaid      REAL NOT NULL,
+      $purchasedDate  TEXT NOT NULL,
+      $dealershipId   INTEGER NOT NULL
+    );
+  ''';
+
+  static const String tableName = 'car';
+  static const String id = 'id';
+  static const String model = 'model';
+  static const String plate = 'plate';
+  static const String brand = 'brand';
+  static const String builtYear = 'built_year';
+  static const String modelYear = 'model_year';
+  static const String photo = 'photo';
+  static const String pricePaid = 'price_paid';
+  static const String purchasedDate = 'purchased_date';
+  static const String dealershipId = 'dealership_id';
+
+  static Map<String, dynamic> toMap(Car car) {
+    final map = <String, dynamic>{};
+
+    map[TableCars.id] = car.id;
+    map[TableCars.model] = car.model;
+    map[TableCars.plate] = car.plate;
+    map[TableCars.brand] = car.brand;
+    map[TableCars.builtYear] = car.builtYear;
+    map[TableCars.modelYear] = car.modelYear;
+    map[TableCars.photo] = car.photo;
+    map[TableCars.pricePaid] = car.pricePaid;
+    map[TableCars.purchasedDate] = car.purchasedDate;
+    map[TableCars.dealershipId] = car.dealershipId;
+
+    return map;
+  }
+}
+
+class CarsController {
+  Future<void> insert(Car car) async {
+    final dataBase = await getDatabase();
+    final map = TableCars.toMap(car);
+
+    await dataBase.insert(TableCars.tableName, map);
+
+    return;
+  }
+
+  Future<List<Car>> select() async {
+    final dataBase = await getDatabase();
+
+    final List<Map<String, dynamic>> result = await dataBase.query(
+      TableCars.tableName,
+    );
+
+    var list = <Car>[];
+
+    for (final it in result) {
+      list.add(
+        Car(
+          id: it[TableCars.id],
+          model: it[TableCars.model],
+          brand: it[TableCars.brand],
+          builtYear: it[TableCars.builtYear],
+          plate: it[TableCars.plate],
+          modelYear: it[TableCars.modelYear],
+          photo: it[TableCars.photo],
+          pricePaid: it[TableCars.pricePaid],
+          purchasedDate: it[TableCars.purchasedDate],
+          dealershipId: it[TableCars.dealershipId],
+        ),
+      );
+    }
+
+    return list;
+  }
+
+  Future<void> delete(Car car) async {
+    final database = await getDatabase();
+
+    await database.transaction(
+      (tx) async {
+        final batch = tx.batch();
+
+        batch.delete(
+          TableCars.tableName,
+          where: '${TableCars.id} = ?',
+          whereArgs: [car.id],
+        );
+
+        await batch.commit();
+      },
+    );
+  }
+
+  Future<void> update(Car car) async {
+    final database = await getDatabase();
+
+    final map = TableCars.toMap(car);
+
+    database.update(
+      TableCars.tableName,
+      map,
+      where: '${TableCars.id} = ?',
+      whereArgs: [car.id],
     );
     return;
   }
