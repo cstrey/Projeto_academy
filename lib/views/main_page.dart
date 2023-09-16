@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'permanence/carousel.dart';
-import 'permanence/menu_drawer.dart';
-import 'permanence/text_apresentation.dart';
+import 'utils/carousel.dart';
+import 'utils/menu_drawer.dart';
+import 'utils/text_apresentation.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({
@@ -30,27 +30,30 @@ class MainPage extends StatelessWidget {
         title: Text(title),
       ),
       drawer: const DrawerMenu(),
-      body: Column(
-        children: [
-          const Carousel(),
-          Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                gradient: const LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [
-                    Color(0xff00456A),
-                    Color(0xff051937),
-                  ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Carousel(),
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  gradient: const LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [
+                      Color(0xff00456A),
+                      Color(0xff051937),
+                    ],
+                  ),
                 ),
-              ),
-              child: const TextPattern(),
+                child: const TextPattern(),
+              )
+
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../controller/cars_controller.dart';
 import '../controller/showuser_controller.dart';
-import '../controller/user_controller.dart';
 import 'register_page.dart';
 import 'utils/menu_drawer.dart';
 
-class ShowUsers extends StatelessWidget {
-  const ShowUsers({
+class ShowCars extends StatelessWidget {
+  const ShowCars({
     super.key,
   });
 
@@ -14,7 +14,7 @@ class ShowUsers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stateUser = Provider.of<UserState>(context);
+    final stateCar = Provider.of<CarState>(context);
     return ChangeNotifierProvider(
       create: (context) => ShowState(),
       child: Consumer<ShowState>(builder: (_, stateShow, __) {
@@ -36,26 +36,26 @@ class ShowUsers extends StatelessWidget {
             title: Text(title),
           ),
           body: ListView.builder(
-            itemCount: stateShow.listUser.length,
+            itemCount: stateShow.listCar.length,
             itemBuilder: (context, index) {
-              final user = stateShow.listUser[index];
+              final car = stateShow.listCar[index];
               return ListTile(
-                title: Text(user.name),
-                subtitle: Text(user.cnpj.toString()),
+                title: Text(car.model),
+                subtitle: Text(car.plate.toString()),
                 trailing: IntrinsicWidth(
                   child: Row(
                     children: [
                       IconButton(
                         onPressed: () async {
-                          stateUser.updateUser(user);
+                          stateCar.updateCar(car);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
                                   ChangeNotifierProvider.value(
-                                value: stateShow,
-                                child: RegisterPage(),
-                              ),
+                                    value: stateShow,
+                                    child: RegisterPage(),
+                                  ),
                             ),
                           );
                         },
@@ -65,7 +65,7 @@ class ShowUsers extends StatelessWidget {
                       ),
                       IconButton(
                         onPressed: () async {
-                          await stateUser.delete(user);
+                          await stateCar.delete(car);
                         },
                         icon: const Icon(
                           Icons.delete,

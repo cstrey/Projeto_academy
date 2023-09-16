@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/car.dart';
@@ -13,6 +14,7 @@ Future<Database> getDatabase() async {
     path,
     onCreate: (db, version) async {
       await db.execute(TableUser.createTable);
+      await db.execute(TableCars.createTable);
     },
     version: 1,
   );
@@ -133,7 +135,6 @@ class TableCars {
       $photo          TEXT NOT NULL,
       $pricePaid      REAL NOT NULL,
       $purchasedDate  TEXT NOT NULL,
-      $dealershipId   INTEGER NOT NULL
     );
   ''';
 
@@ -147,12 +148,9 @@ class TableCars {
   static const String photo = 'photo';
   static const String pricePaid = 'price_paid';
   static const String purchasedDate = 'purchased_date';
-  static const String dealershipId = 'dealership_id';
 
   static Map<String, dynamic> toMap(Car car) {
     final map = <String, dynamic>{};
-
-    map[TableCars.id] = car.id;
     map[TableCars.model] = car.model;
     map[TableCars.plate] = car.plate;
     map[TableCars.brand] = car.brand;
@@ -160,8 +158,7 @@ class TableCars {
     map[TableCars.modelYear] = car.modelYear;
     map[TableCars.photo] = car.photo;
     map[TableCars.pricePaid] = car.pricePaid;
-    map[TableCars.purchasedDate] = car.purchasedDate;
-    map[TableCars.dealershipId] = car.dealershipId;
+    map[TableCars.purchasedDate] = DateFormat('yyyy-MM-dd').format(car.purchasedDate);
 
     return map;
   }
@@ -183,6 +180,8 @@ class CarsController {
     final List<Map<String, dynamic>> result = await dataBase.query(
       TableCars.tableName,
     );
+    print('ççç');
+    print(result);
 
     var list = <Car>[];
 
@@ -197,8 +196,7 @@ class CarsController {
           modelYear: it[TableCars.modelYear],
           photo: it[TableCars.photo],
           pricePaid: it[TableCars.pricePaid],
-          purchasedDate: it[TableCars.purchasedDate],
-          dealershipId: it[TableCars.dealershipId],
+          purchasedDate: DateFormat('yyyy-MM-dd').parse(it[TableCars.purchasedDate]),
         ),
       );
     }
