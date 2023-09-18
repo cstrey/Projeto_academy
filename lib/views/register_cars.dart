@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../controller/cars_controller.dart';
 import '../controller/theme_controller.dart';
 import 'show_cars.dart';
-import 'show_users.dart';
 import 'utils/form.dart';
 import 'utils/menu_drawer.dart';
 
@@ -31,7 +30,7 @@ class RegisterCarsPage extends StatelessWidget {
             ),
           ),
         ),
-        title: const Text('Registre Sua Loja'),
+        title: const Text('Registre Seu Veículo'),
         actions: [
           IconButton(
             onPressed: state.toggleTheme,
@@ -131,7 +130,7 @@ class RegisterCarsPage extends StatelessWidget {
                   controler: stateCar.controllerPurchaseDate,
                   labelText: 'Data da Compra',
                   keyboardType: TextInputType.text,
-                  mask: MaskTextInputFormatter(mask: '##/##/####'),
+                  mask: MaskTextInputFormatter(mask: '##/##/####/##:##:##'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Por favor, informe uma Data válida.';
@@ -142,6 +141,7 @@ class RegisterCarsPage extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () async {
                     if (stateCar.oldCar != null) {
+                      stateCar.updateCar;
                       await stateCar.update();
                     } else {
                       await stateCar.insert();

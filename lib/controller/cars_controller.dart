@@ -45,18 +45,20 @@ class CarState extends ChangeNotifier {
   List<Car> get listCar => _listCar;
 
   Future<void> insert() async {
-
     final car = Car(
-        model: controllerModel.text,
-        plate: controllerPlate.text,
-        brand: controllerBrand.text,
-        builtYear: int.parse(controllerBuiltYear.text),
-        modelYear: int.parse(controllerModelYear.text),
-        photo: controllerPhoto.text,
-        pricePaid: double.parse(controllerPricePaid.text),
-        purchasedDate: DateFormat('dd/MM/yyyy').parse(controllerPurchaseDate.text));
+      model: controllerModel.text,
+      plate: controllerPlate.text,
+      brand: controllerBrand.text,
+      builtYear: int.parse(controllerBuiltYear.text),
+      modelYear: int.parse(controllerModelYear.text),
+      photo: controllerPhoto.text,
+      pricePaid: double.parse(controllerPricePaid.text),
+      purchasedDate:
+          DateFormat('yyyy/MM/dd').parse(controllerPurchaseDate.text),
+    );
 
     await controller.insert(car);
+    await loadData();
 
     controllerModel.clear();
     controllerPlate.clear();
@@ -83,6 +85,8 @@ class CarState extends ChangeNotifier {
   Future<void> delete(Car car) async {
     await controller.delete(car);
     await loadData();
+
+    notifyListeners();
   }
 
   void updateCar(Car car) {
@@ -103,7 +107,10 @@ class CarState extends ChangeNotifier {
       modelYear: int.parse(controllerModelYear.text),
       photo: controllerPhoto.text,
       pricePaid: double.parse(controllerPricePaid.text),
-      purchasedDate: DateTime.parse(controllerPurchaseDate.text),);
+      purchasedDate: DateFormat('yyyy/MM/dd').parse(
+        controllerPurchaseDate.text,
+      ),
+    );
   }
 
   Future<void> update() async {
@@ -115,10 +122,12 @@ class CarState extends ChangeNotifier {
       modelYear: int.parse(controllerModelYear.text),
       photo: controllerPhoto.text,
       pricePaid: double.parse(controllerPricePaid.text),
-      purchasedDate: DateTime.parse(controllerPurchaseDate.text),
+      purchasedDate: DateFormat('dd/MM/yyyy').parse(
+        controllerPurchaseDate.text,
+      ),
     );
     await controller.update(updateCar);
-    _oldCar = null;
+
     controllerModel.clear();
     controllerPlate.clear();
     controllerBrand.clear();

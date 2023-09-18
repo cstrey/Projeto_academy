@@ -93,18 +93,10 @@ class UserController {
   Future<void> delete(User person) async {
     final database = await getDatabase();
 
-    await database.transaction(
-      (tx) async {
-        final batch = tx.batch();
-
-        batch.delete(
-          TableUser.tableName,
-          where: '${TableUser.id} = ?',
-          whereArgs: [person.id],
-        );
-
-        await batch.commit();
-      },
+    database.delete(
+      TableUser.tableName,
+      where: '${TableUser.id} = ?',
+      whereArgs: [person.id],
     );
   }
 
@@ -134,7 +126,7 @@ class TableCars {
       $modelYear      INTEGER NOT NULL,
       $photo          TEXT NOT NULL,
       $pricePaid      REAL NOT NULL,
-      $purchasedDate  TEXT NOT NULL,
+      $purchasedDate  TEXT NOT NULL
     );
   ''';
 
@@ -158,7 +150,9 @@ class TableCars {
     map[TableCars.modelYear] = car.modelYear;
     map[TableCars.photo] = car.photo;
     map[TableCars.pricePaid] = car.pricePaid;
-    map[TableCars.purchasedDate] = DateFormat('yyyy-MM-dd').format(car.purchasedDate);
+    map[TableCars.purchasedDate] = DateFormat('yyyy/MM/dd').format(
+      car.purchasedDate,
+    );
 
     return map;
   }
@@ -180,8 +174,6 @@ class CarsController {
     final List<Map<String, dynamic>> result = await dataBase.query(
       TableCars.tableName,
     );
-    print('ççç');
-    print(result);
 
     var list = <Car>[];
 
@@ -196,7 +188,8 @@ class CarsController {
           modelYear: it[TableCars.modelYear],
           photo: it[TableCars.photo],
           pricePaid: it[TableCars.pricePaid],
-          purchasedDate: DateFormat('yyyy-MM-dd').parse(it[TableCars.purchasedDate]),
+          purchasedDate:
+              DateFormat('yyyy/MM/dd').parse(it[TableCars.purchasedDate]),
         ),
       );
     }
@@ -207,18 +200,10 @@ class CarsController {
   Future<void> delete(Car car) async {
     final database = await getDatabase();
 
-    await database.transaction(
-      (tx) async {
-        final batch = tx.batch();
-
-        batch.delete(
-          TableCars.tableName,
-          where: '${TableCars.id} = ?',
-          whereArgs: [car.id],
-        );
-
-        await batch.commit();
-      },
+    database.delete(
+      TableCars.tableName,
+      where: '${TableCars.id} = ?',
+      whereArgs: [car.id],
     );
   }
 

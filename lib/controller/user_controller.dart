@@ -3,7 +3,6 @@ import '../models/user.dart';
 import 'database.dart';
 
 class UserState extends ChangeNotifier {
-
   final controller = UserController();
   final formKey = GlobalKey<FormState>();
   final _controllerUser = TextEditingController();
@@ -63,6 +62,8 @@ class UserState extends ChangeNotifier {
   Future<void> delete(User person) async {
     await controller.delete(person);
     await loadData();
+
+    notifyListeners();
   }
 
   Future<void> loadData() async {

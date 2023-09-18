@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../controller/user_controller.dart';
 import '../controller/theme_controller.dart';
+import '../controller/user_controller.dart';
 import 'utils/form.dart';
 
 class LoginPage extends StatelessWidget {
@@ -45,9 +45,7 @@ class LoginPage extends StatelessWidget {
               labelText: 'CNPJ do Usuário',
               keyboardType: TextInputType.text,
               validator: (value) {
-                if (value == null ||
-                    value.isEmpty ||
-                    value.length != 14) {
+                if (value == null || value.isEmpty || value.length != 14) {
                   return 'Por favor, informe um CNPJ válido.';
                 }
                 return null;
@@ -73,11 +71,9 @@ class LoginPage extends StatelessWidget {
                 final password = stateUser.controllerPassword.text;
                 final userLogin = await stateUser.getUser(userCnpj);
                 if (stateUser.formKey.currentState!.validate()) {
-                  if (userLogin != null &&
-                      userLogin.password == password) {
+                  if (userLogin != null && userLogin.password == password) {
                     if (context.mounted) {
-                      await Navigator.of(context)
-                          .pushReplacementNamed('/');
+                      await Navigator.of(context).pushReplacementNamed('/');
                     }
                   } else {
                     if (context.mounted) {

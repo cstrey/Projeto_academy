@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_lince/views/show_cars.dart';
 import 'package:provider/provider.dart';
 import 'controller/cars_controller.dart';
-import 'controller/user_controller.dart';
 import 'controller/theme_controller.dart';
+import 'controller/user_controller.dart';
 import 'views/login_page.dart';
 import 'views/main_page.dart';
 import 'views/register_cars.dart';
 import 'views/register_page.dart';
+import 'views/show_cars.dart';
 import 'views/show_users.dart';
 
 const Color mainColor = Color.fromARGB(255, 57, 57, 196);
