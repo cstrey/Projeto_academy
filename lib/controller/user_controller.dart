@@ -30,6 +30,7 @@ class UserState extends ChangeNotifier {
     );
 
     await controller.insert(person);
+    await loadData();
 
     controllerAutonomy.clear();
     controllerName.clear();

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../models/car.dart';
 import 'database.dart';
 
@@ -53,8 +52,7 @@ class CarState extends ChangeNotifier {
       modelYear: int.parse(controllerModelYear.text),
       photo: controllerPhoto.text,
       pricePaid: double.parse(controllerPricePaid.text),
-      purchasedDate:
-          DateFormat('yyyy/MM/dd').parse(controllerPurchaseDate.text),
+      purchasedDate: controllerPurchaseDate.text,
     );
 
     await controller.insert(car);
@@ -78,8 +76,6 @@ class CarState extends ChangeNotifier {
     listCar
       ..clear()
       ..addAll(list);
-
-    notifyListeners();
   }
 
   Future<void> delete(Car car) async {
@@ -100,6 +96,7 @@ class CarState extends ChangeNotifier {
     _controllerPurchaseDate.text = car.purchasedDate.toString();
 
     _oldCar = Car(
+      id: car.id,
       model: controllerModel.text,
       plate: controllerPlate.text,
       brand: controllerBrand.text,
@@ -107,14 +104,13 @@ class CarState extends ChangeNotifier {
       modelYear: int.parse(controllerModelYear.text),
       photo: controllerPhoto.text,
       pricePaid: double.parse(controllerPricePaid.text),
-      purchasedDate: DateFormat('yyyy/MM/dd').parse(
-        controllerPurchaseDate.text,
-      ),
+      purchasedDate: controllerPurchaseDate.text,
     );
   }
 
   Future<void> update() async {
     final updateCar = Car(
+      id: _oldCar!.id,
       model: controllerModel.text,
       plate: controllerPlate.text,
       brand: controllerBrand.text,
@@ -122,12 +118,11 @@ class CarState extends ChangeNotifier {
       modelYear: int.parse(controllerModelYear.text),
       photo: controllerPhoto.text,
       pricePaid: double.parse(controllerPricePaid.text),
-      purchasedDate: DateFormat('dd/MM/yyyy').parse(
-        controllerPurchaseDate.text,
-      ),
+      purchasedDate: controllerPurchaseDate.text,
     );
     await controller.update(updateCar);
 
+    _oldCar = null;
     controllerModel.clear();
     controllerPlate.clear();
     controllerBrand.clear();

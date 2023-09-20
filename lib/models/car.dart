@@ -7,7 +7,7 @@ class Car {
   final int modelYear;
   final String photo;
   final double pricePaid;
-  final DateTime purchasedDate;
+  final String purchasedDate;
 
   Car({
     this.id,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../controller/theme_controller.dart';
 import '../controller/user_controller.dart';
 import 'show_users.dart';
 import 'utils/dropdown_autonomy.dart';
@@ -8,13 +7,10 @@ import 'utils/form.dart';
 import 'utils/menu_drawer.dart';
 
 class RegisterPage extends StatelessWidget {
-  RegisterPage({super.key});
-
-  final _formKey = GlobalKey<FormState>();
+  const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final state = Provider.of<MyState>(context);
     final stateUser = Provider.of<UserState>(context);
     return Scaffold(
       appBar: AppBar(
@@ -31,20 +27,12 @@ class RegisterPage extends StatelessWidget {
           ),
         ),
         title: const Text('Registre Sua Loja'),
-        actions: [
-          IconButton(
-            onPressed: state.toggleTheme,
-            icon: Icon(
-              state.ligthMode ? Icons.dark_mode : Icons.light_mode,
-            ),
-          ),
-        ],
       ),
       drawer: const DrawerMenu(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
-          key: _formKey,
+          key: stateUser.formKey,
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -91,18 +79,21 @@ class RegisterPage extends StatelessWidget {
                 DropMenu(),
                 ElevatedButton(
                   onPressed: () async {
-                    if (stateUser.oldUser != null) {
-                      stateUser.updateUser;
-                      await stateUser.update();
-                    } else {
-                      await stateUser.insert();
-                    }
-                    if (context.mounted) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ShowUsers()),
-                      );
+                    if (stateUser.formKey.currentState!.validate()) {
+                      if (stateUser.oldUser != null) {
+                        stateUser.updateUser;
+                        await stateUser.update();
+                      } else {
+                        await stateUser.insert();
+                      }
+                      if (context.mounted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ShowUsers(),
+                          ),
+                        );
+                      }
                     }
                   },
                   child: const Text('Cadastrar'),

@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/car.dart';
@@ -150,9 +149,7 @@ class TableCars {
     map[TableCars.modelYear] = car.modelYear;
     map[TableCars.photo] = car.photo;
     map[TableCars.pricePaid] = car.pricePaid;
-    map[TableCars.purchasedDate] = DateFormat('yyyy/MM/dd').format(
-      car.purchasedDate,
-    );
+    map[TableCars.purchasedDate] = car.purchasedDate;
 
     return map;
   }
@@ -188,8 +185,7 @@ class CarsController {
           modelYear: it[TableCars.modelYear],
           photo: it[TableCars.photo],
           pricePaid: it[TableCars.pricePaid],
-          purchasedDate:
-              DateFormat('yyyy/MM/dd').parse(it[TableCars.purchasedDate]),
+          purchasedDate: it[TableCars.purchasedDate],
         ),
       );
     }
