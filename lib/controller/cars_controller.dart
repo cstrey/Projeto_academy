@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../models/car.dart';
 import 'database.dart';
 
@@ -15,9 +16,9 @@ class CarState extends ChangeNotifier {
   final _controllerBrand = TextEditingController();
   final _controllerBuiltYear = TextEditingController();
   final _controllerModelYear = TextEditingController();
-  final _controllerPhoto = TextEditingController();
   final _controllerPricePaid = TextEditingController();
   final _controllerPurchaseDate = TextEditingController();
+  String? _controllerPhoto;
   Car? _oldCar;
   final _listCar = <Car>[];
 
@@ -33,11 +34,11 @@ class CarState extends ChangeNotifier {
 
   TextEditingController get controllerModelYear => _controllerModelYear;
 
-  TextEditingController get controllerPhoto => _controllerPhoto;
-
   TextEditingController get controllerPricePaid => _controllerPricePaid;
 
   TextEditingController get controllerPurchaseDate => _controllerPurchaseDate;
+
+  String? get controllerPhoto => _controllerPhoto;
 
   Car? get oldCar => _oldCar;
 
@@ -50,8 +51,10 @@ class CarState extends ChangeNotifier {
       brand: controllerBrand.text,
       builtYear: int.parse(controllerBuiltYear.text),
       modelYear: int.parse(controllerModelYear.text),
-      photo: controllerPhoto.text,
-      pricePaid: double.parse(controllerPricePaid.text),
+      photo: controllerPhoto.toString(),
+      pricePaid: double.parse(
+        controllerPricePaid.text.replaceAll(RegExp(r','), ''),
+      ),
       purchasedDate: controllerPurchaseDate.text,
     );
 
@@ -63,9 +66,9 @@ class CarState extends ChangeNotifier {
     controllerBrand.clear();
     controllerBuiltYear.clear();
     controllerModelYear.clear();
-    controllerPhoto.clear();
     controllerPricePaid.clear();
     controllerPurchaseDate.clear();
+    _controllerPhoto = null;
 
     notifyListeners();
   }
@@ -91,7 +94,7 @@ class CarState extends ChangeNotifier {
     _controllerBrand.text = car.brand;
     _controllerBuiltYear.text = car.builtYear.toString();
     _controllerModelYear.text = car.modelYear.toString();
-    _controllerPhoto.text = car.photo;
+    _controllerPhoto = car.photo.toString();
     _controllerPricePaid.text = car.pricePaid.toString();
     _controllerPurchaseDate.text = car.purchasedDate.toString();
 
@@ -102,7 +105,7 @@ class CarState extends ChangeNotifier {
       brand: controllerBrand.text,
       builtYear: int.parse(controllerBuiltYear.text),
       modelYear: int.parse(controllerModelYear.text),
-      photo: controllerPhoto.text,
+      photo: controllerPhoto.toString(),
       pricePaid: double.parse(controllerPricePaid.text),
       purchasedDate: controllerPurchaseDate.text,
     );
@@ -116,22 +119,52 @@ class CarState extends ChangeNotifier {
       brand: controllerBrand.text,
       builtYear: int.parse(controllerBuiltYear.text),
       modelYear: int.parse(controllerModelYear.text),
-      photo: controllerPhoto.text,
+      photo: controllerPhoto.toString(),
       pricePaid: double.parse(controllerPricePaid.text),
       purchasedDate: controllerPurchaseDate.text,
     );
     await controller.update(updateCar);
 
     _oldCar = null;
+    _controllerPhoto = null;
     controllerModel.clear();
     controllerPlate.clear();
     controllerBrand.clear();
     controllerBuiltYear.clear();
     controllerModelYear.clear();
-    controllerPhoto.clear();
     controllerPricePaid.clear();
     controllerPurchaseDate.clear();
 
     await loadData();
   }
+
+  Future pickImage() async {
+    {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+
+      _controllerPhoto = image.path;
+    }
+    notifyListeners();
+  }
+
+  Future takePhoto() async {
+    {
+      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      if (image == null) return;
+
+      _controllerPhoto = image.path;
+      notifyListeners();
+    }
+  }
+
+  /*Future<File> loadVehicleImage(String imageName) async {
+    final result = await LocalStorage().loadImageLocal(imageName);
+    return result;
+  }
+
+  void setPickedDate(String date) {
+    _controllerPurchaseDate.text = date;
+    notifyListeners();
+  }*/
 }

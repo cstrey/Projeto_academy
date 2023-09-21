@@ -3,8 +3,10 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import '../controller/cars_controller.dart';
 import 'show_cars.dart';
+import 'utils/choose_take_photo.dart';
 import 'utils/form.dart';
 import 'utils/menu_drawer.dart';
+import 'utils/photo_list.dart';
 
 class RegisterCarsPage extends StatelessWidget {
   const RegisterCarsPage({super.key});
@@ -93,17 +95,6 @@ class RegisterCarsPage extends StatelessWidget {
                   },
                 ),
                 FormPattern(
-                  controler: stateCar.controllerPhoto,
-                  labelText: 'Foto',
-                  keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, informe uma Foto válida.';
-                    }
-                    return null;
-                  },
-                ),
-                FormPattern(
                   controler: stateCar.controllerPricePaid,
                   labelText: 'Preço Pago',
                   keyboardType: TextInputType.text,
@@ -126,6 +117,22 @@ class RegisterCarsPage extends StatelessWidget {
                     return null;
                   },
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 8,
+                    bottom: 8,
+                  ),
+                  child: stateCar.controllerPhoto != null
+                      ? const PhotosList()
+                      : Container(),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    top: 8,
+                    bottom: 8,
+                  ),
+                  child: ChooseOrTakePhoto(),
+                ),
                 ElevatedButton(
                   onPressed: () async {
                     if (stateCar.formKey.currentState!.validate()) {
@@ -135,9 +142,8 @@ class RegisterCarsPage extends StatelessWidget {
                       } else {
                         await stateCar.insert();
                       }
-
                       if (context.mounted) {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const ShowCars(),
