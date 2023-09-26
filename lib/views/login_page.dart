@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../controller/theme_controller.dart';
 import '../controller/user_controller.dart';
 import 'utils/form.dart';
+import 'utils/header.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -41,28 +42,15 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FormPattern(
-              labelText: 'CNPJ do Usuário',
-              keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value == null || value.isEmpty || value.length != 14) {
-                  return 'Por favor, informe um CNPJ válido.';
-                }
-                return null;
-              },
-              controler: stateUser.controllerCnpj,
+            const AppHeader(header: 'CNPJ'),
+            const Padding(
+              padding: EdgeInsets.all(8),
+              child: _CnpjTextField(),
             ),
-            FormPattern(
-              labelText: 'Senha',
-              keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value == null || value.isEmpty || value.length < 4) {
-                  return 'Por favor, informe uma senha válida.';
-                }
-                return null;
-              },
-              obscureText: true,
-              controler: stateUser.controllerPassword,
+            const AppHeader(header: 'Senha'),
+            const Padding(
+              padding: EdgeInsets.all(8),
+              child: _PasswordTextField(),
             ),
             ElevatedButton(
               child: const Text('Entrar'),
@@ -73,6 +61,7 @@ class LoginPage extends StatelessWidget {
                 if (stateUser.formKey.currentState!.validate()) {
                   if (userLogin != null && userLogin.password == password) {
                     if (context.mounted) {
+                      state.setLoggedUser(userLogin);
                       await Navigator.of(context).pushReplacementNamed('/');
                     }
                   } else {
@@ -104,6 +93,52 @@ class LoginPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _CnpjTextField extends StatelessWidget {
+  const _CnpjTextField();
+
+  String? validator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor, informe um CNPJ válido.';
+    } else if (value.length < 14 || value.length > 14) {
+      return 'cnpj deve conter 14 digitos';
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final stateUser = Provider.of<UserState>(context, listen: true);
+    return AppTextField(
+      controller: stateUser.controllerCnpj,
+      validator: validator,
+      hint: '02.652.603/0001-01',
+    );
+  }
+}
+
+class _PasswordTextField extends StatelessWidget {
+  const _PasswordTextField();
+
+  String? validator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor, informe uma senha válida.';
+    } else if (value.length > 12) {
+      return 'senha deve  ter menos de 12 caracteres';
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final stateUser = Provider.of<UserState>(context, listen: true);
+    return AppTextField(
+      controller: stateUser.controllerPassword,
+      validator: validator,
+      hint: '*****',
     );
   }
 }

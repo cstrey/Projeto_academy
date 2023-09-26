@@ -1,40 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-class FormPattern extends StatelessWidget {
-  final String labelText;
-  final TextEditingController controler;
-  final TextInputType keyboardType;
-  final String? Function(String?) validator;
-  final bool? obscureText;
-  final MaskTextInputFormatter? mask;
-
-  const FormPattern({
+class AppTextField extends StatelessWidget {
+  const AppTextField({
     super.key,
-    required this.controler,
-    required this.labelText,
-    required this.keyboardType,
+    required this.controller,
     required this.validator,
+    this.inputType,
+    this.hint,
+    this.icon,
     this.obscureText,
-    this.mask,
+    this.obscureTextButton,
+    this.readOnly,
+    this.onTap,
   });
+
+  final TextEditingController controller;
+  final TextInputType? inputType;
+  final String? hint;
+  final String? Function(String?)? validator;
+  final Icon? icon;
+  final bool? obscureText;
+  final IconButton? obscureTextButton;
+  final bool? readOnly;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextFormField(
-        controller: controler,
-        keyboardType: keyboardType,
-        decoration: InputDecoration(
-          labelText: labelText,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.0),
+    return TextFormField(
+      controller: controller,
+      obscureText: obscureText ?? false,
+      keyboardType: inputType ?? TextInputType.text,
+      readOnly: readOnly ?? false,
+      decoration: InputDecoration(
+        hintText: hint ?? 'Please type here',
+        prefixIcon: icon,
+        suffixIcon: obscureTextButton,
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
           ),
         ),
-        inputFormatters: (mask != null) ? [mask!] : null,
-        validator: validator,
       ),
+      onTap: onTap,
+      validator: validator,
     );
   }
 }

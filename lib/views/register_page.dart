@@ -4,6 +4,7 @@ import '../controller/user_controller.dart';
 import 'show_users.dart';
 import 'utils/dropdown_autonomy.dart';
 import 'utils/form.dart';
+import 'utils/header.dart';
 import 'utils/menu_drawer.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -37,72 +38,121 @@ class RegisterPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FormPattern(
-                  controler: stateUser.controllerName,
-                  labelText: 'Nome da Loja',
-                  keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, informe um nome válido.';
-                    } else if (value.length > 120) {
-                      return 'Nome deve ter menos de 120 caracteres';
-                    }
-                    return null;
-                  },
+                const AppHeader(header: 'Name'),
+                const Padding(
+                  padding: EdgeInsets.all(8),
+                  child: _NameTextField(),
                 ),
-                FormPattern(
-                  controler: stateUser.controllerCnpj,
-                  labelText: 'CNPJ',
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, informe um CNPJ válido.';
-                    } else if (value.length < 14 || value.length > 14) {
-                      return 'cnpj deve conter 14 digitos';
-                    }
-                    return null;
-                  },
+                const AppHeader(header: 'CNPJ'),
+                const Padding(
+                  padding: EdgeInsets.all(8),
+                  child: _CnpjTextField(),
                 ),
-                FormPattern(
-                  controler: stateUser.controllerPassword,
-                  labelText: 'Senha',
-                  keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, informe uma senha válida.';
-                    } else if (value.length > 12) {
-                      return 'senha deve  ter menos de 12 caracteres';
-                    }
-                    return null;
-                  },
+                const AppHeader(header: 'Senha'),
+                const Padding(
+                  padding: EdgeInsets.all(8),
+                  child: _PasswordTextField(),
                 ),
+                const AppHeader(header: 'Nível de Autonomia'),
                 DropMenu(),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (stateUser.formKey.currentState!.validate()) {
-                      if (stateUser.oldUser != null) {
-                        stateUser.updateUser;
-                        await stateUser.update();
-                      } else {
-                        await stateUser.insert();
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (stateUser.formKey.currentState!.validate()) {
+                        if (stateUser.oldUser != null) {
+                          stateUser.updateUser;
+                          await stateUser.update();
+                        } else {
+                          await stateUser.insert();
+                        }
+                        if (context.mounted) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ShowUsers(),
+                            ),
+                          );
+                        }
                       }
-                      if (context.mounted) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ShowUsers(),
-                          ),
-                        );
-                      }
-                    }
-                  },
-                  child: const Text('Cadastrar'),
+                    },
+                    child: const Text('Cadastrar'),
+                  ),
                 ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _NameTextField extends StatelessWidget {
+  const _NameTextField();
+
+  String? validator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor, informe um nome válido.';
+    } else if (value.length > 120) {
+      return 'Nome deve ter menos de 120 caracteres';
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final stateUser = Provider.of<UserState>(context, listen: true);
+    return AppTextField(
+      controller: stateUser.controllerName,
+      validator: validator,
+      hint: 'Anderson',
+    );
+  }
+}
+
+class _CnpjTextField extends StatelessWidget {
+  const _CnpjTextField();
+
+  String? validator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor, informe um CNPJ válido.';
+    } else if (value.length < 14 || value.length > 14) {
+      return 'cnpj deve conter 14 digitos';
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final stateUser = Provider.of<UserState>(context, listen: true);
+    return AppTextField(
+      controller: stateUser.controllerCnpj,
+      validator: validator,
+      hint: '02.652.603/0001-01',
+    );
+  }
+}
+
+class _PasswordTextField extends StatelessWidget {
+  const _PasswordTextField();
+
+  String? validator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor, informe uma senha válida.';
+    } else if (value.length > 12) {
+      return 'senha deve  ter menos de 12 caracteres';
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final stateUser = Provider.of<UserState>(context, listen: true);
+    return AppTextField(
+      controller: stateUser.controllerPassword,
+      validator: validator,
+      hint: '*****',
     );
   }
 }

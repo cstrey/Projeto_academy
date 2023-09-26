@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/car.dart';
+import '../models/user.dart';
+import 'api_controller.dart';
 import 'database.dart';
 
 class CarState extends ChangeNotifier {
   CarState() {
+    init();
     loadData();
   }
+  Car? _oldCar;
+
+  final _listCar = <Car>[];
+
+  late User _loggedUser;
+
+  Car? car;
 
   final controller = CarsController();
   final formKey = GlobalKey<FormState>();
@@ -19,8 +29,6 @@ class CarState extends ChangeNotifier {
   final _controllerPricePaid = TextEditingController();
   final _controllerPurchaseDate = TextEditingController();
   String? _controllerPhoto;
-  Car? _oldCar;
-  final _listCar = <Car>[];
 
   TextEditingController get controllerCar => _controllerCar;
 
@@ -44,6 +52,55 @@ class CarState extends ChangeNotifier {
 
   List<Car> get listCar => _listCar;
 
+  final modelFieldFocusNode = FocusNode();
+  final brandFieldFocusNode = FocusNode();
+
+  final allBrands = <String>[];
+  final allModels = <String>[];
+
+  void init() async {
+    //_loggedUser = user;
+    final result = await getBrandNames();
+
+    allBrands.addAll(result ?? []);
+
+    modelFieldFocusNode.addListener(
+      () async {
+        if (modelFieldFocusNode.hasFocus) {
+          final result = await getModelsByBrand(controllerBrand.text);
+          allModels.addAll(result!);
+          notifyListeners();
+        }
+      },
+    );
+  }
+
+  Future<List<String>?> getBrandNames() async {
+    final brandsList = await getCarBrands();
+
+    final brandNames = <String>[];
+
+    if (brandsList != null) {
+      for (final item in brandsList) {
+        brandNames.add(item.name!);
+      }
+    }
+    return brandNames;
+  }
+
+  Future<List<String>?> getModelsByBrand(String brand) async {
+    final modelsList = await getCarModel(brand);
+
+    final modelNames = <String>[];
+
+    if (modelsList != null) {
+      for (final item in modelsList) {
+        modelNames.add(item.name!);
+      }
+    }
+    return modelNames;
+  }
+
   Future<void> insert() async {
     final car = Car(
       model: controllerModel.text,
@@ -56,6 +113,7 @@ class CarState extends ChangeNotifier {
         controllerPricePaid.text.replaceAll(RegExp(r','), ''),
       ),
       purchasedDate: controllerPurchaseDate.text,
+      dealershipId: _loggedUser.id!,
     );
 
     await controller.insert(car);
@@ -108,6 +166,7 @@ class CarState extends ChangeNotifier {
       photo: controllerPhoto.toString(),
       pricePaid: double.parse(controllerPricePaid.text),
       purchasedDate: controllerPurchaseDate.text,
+      dealershipId: _loggedUser.id!,
     );
   }
 
@@ -122,6 +181,7 @@ class CarState extends ChangeNotifier {
       photo: controllerPhoto.toString(),
       pricePaid: double.parse(controllerPricePaid.text),
       purchasedDate: controllerPurchaseDate.text,
+      dealershipId: _loggedUser.id!,
     );
     await controller.update(updateCar);
 
@@ -157,14 +217,4 @@ class CarState extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  /*Future<File> loadVehicleImage(String imageName) async {
-    final result = await LocalStorage().loadImageLocal(imageName);
-    return result;
-  }
-
-  void setPickedDate(String date) {
-    _controllerPurchaseDate.text = date;
-    notifyListeners();
-  }*/
 }

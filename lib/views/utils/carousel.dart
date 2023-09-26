@@ -20,7 +20,7 @@ class _CarouselState extends State<Carousel> {
     },
     {
       'url':
-          'https://www.automaxfiat.com.br/wp-content/uploads/2021/03/tipos-de-carros-1024x683.jpg'
+          'https://mercador.blob.core.windows.net/imagens/blog/9/2021/7/253e69e6-7463-4219-8e6a-a63d680628db-lg.jpg'
     },
   ];
 

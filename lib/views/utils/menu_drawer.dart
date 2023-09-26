@@ -71,7 +71,7 @@ class DrawerMenu extends StatelessWidget {
                   leading: const Icon(Icons.home),
                   iconColor: mainColor,
                   onTap: () {
-                    Navigator.pushNamed(context, '/');
+                    Navigator.pushReplacementNamed(context, '/');
                   },
                 ),
                 ListTile(
@@ -80,7 +80,7 @@ class DrawerMenu extends StatelessWidget {
                   leading: const Icon(Icons.person_2),
                   iconColor: mainColor,
                   onTap: () {
-                    Navigator.pushNamed(context, '/users');
+                    Navigator.pushReplacementNamed(context, '/users');
                   },
                 ),
                 ListTile(
@@ -89,15 +89,26 @@ class DrawerMenu extends StatelessWidget {
                   leading: const Icon(Icons.view_agenda),
                   iconColor: mainColor,
                   onTap: () {
-                    Navigator.pushNamed(context, '/cars');
+                    Navigator.pushReplacementNamed(context, '/cars');
                   },
                 ),
                 ListTile(
-                  title: showTittle('Configurações'),
-                  subtitle: const Text('Fazer ajustes na conta'),
-                  leading: const Icon(Icons.brightness_7),
+                  title: showTittle('Gerenciar Vendas'),
+                  subtitle: const Text('Visualizar Vendas'),
+                  leading: const Icon(Icons.shopping_bag),
                   iconColor: mainColor,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, '/');
+                  },
+                ),
+                ListTile(
+                  title: showTittle('Vendas'),
+                  subtitle: const Text('Registrar uma Venda'),
+                  leading: const Icon(Icons.sell),
+                  iconColor: mainColor,
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, '/');
+                  },
                 ),
                 ListTile(
                   title: showTittle('Veículos'),
@@ -105,7 +116,7 @@ class DrawerMenu extends StatelessWidget {
                   leading: const Icon(Icons.car_repair),
                   iconColor: mainColor,
                   onTap: () {
-                    Navigator.pushNamed(context, '/registerCar');
+                    Navigator.pushReplacementNamed(context, '/registerCar');
                   },
                 ),
                 ListTile(
@@ -114,16 +125,16 @@ class DrawerMenu extends StatelessWidget {
                   leading: const Icon(Icons.app_registration),
                   iconColor: mainColor,
                   onTap: () {
-                    Navigator.pushNamed(context, '/register');
+                    Navigator.pushReplacementNamed(context, '/register');
                   },
                 ),
                 ListTile(
-                  title: showTittle('Logout'),
+                  title: showTittle('Login'),
                   subtitle: const Text('Sair do aplicativo'),
-                  leading: const Icon(Icons.logout),
+                  leading: const Icon(Icons.login),
                   iconColor: mainColor,
                   onTap: () {
-                    Navigator.pushNamed(context, '/login');
+                    Navigator.pushReplacementNamed(context, '/login');
                   },
                 ),
                 IconButton(

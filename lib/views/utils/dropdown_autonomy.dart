@@ -16,7 +16,6 @@ class DropMenu extends StatelessWidget {
           return DropdownButtonFormField(
             hint: const Text('Escolha o Nivel de Autonomia'),
             decoration: InputDecoration(
-              label: const Text('Nivel de Autonomia'),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
