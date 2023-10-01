@@ -115,20 +115,21 @@ class RegisterCarsPage extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () async {
                     if (stateCar.formKey.currentState!.validate()) {
-                      if (stateCar.oldCar != null) {
-                        stateCar.updateCar;
-                        await stateCar.update();
-                      } else {
-                        await stateCar.insert();
-                      }
-                      if (context.mounted) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ShowCars(),
-                          ),
-                        );
-                      }
+                      return;
+                    }
+                    if (stateCar.oldCar != null) {
+                      stateCar.updateCar;
+                      await stateCar.update();
+                    } else {
+                      await stateCar.insert();
+                    }
+                    if (context.mounted) {
+                      await Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ShowCars(),
+                        ),
+                      );
                     }
                   },
                   child: const Text('Cadastrar'),

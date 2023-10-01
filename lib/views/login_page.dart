@@ -103,8 +103,6 @@ class _CnpjTextField extends StatelessWidget {
   String? validator(String? value) {
     if (value == null || value.isEmpty) {
       return 'Por favor, informe um CNPJ válido.';
-    } else if (value.length < 14 || value.length > 14) {
-      return 'cnpj deve conter 14 digitos';
     }
     return null;
   }
@@ -136,6 +134,7 @@ class _PasswordTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final stateUser = Provider.of<UserState>(context, listen: true);
     return AppTextField(
+      obscureText: true,
       controller: stateUser.controllerPassword,
       validator: validator,
       hint: '*****',

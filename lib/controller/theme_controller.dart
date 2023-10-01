@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,7 +9,7 @@ const appThemeModeKey = 'appThemeMode';
 
 class MyState extends ChangeNotifier {
   MyState() {
-    _init();
+    unawaited(_init());
   }
   late final SharedPreferences _sharedPreferences;
 
@@ -15,9 +17,9 @@ class MyState extends ChangeNotifier {
 
   bool get ligthMode => _lightMode;
 
-  void toggleTheme() {
+  Future<void> toggleTheme() async {
     _lightMode = !_lightMode;
-    _sharedPreferences.setBool(appThemeModeKey, _lightMode);
+    await _sharedPreferences.setBool(appThemeModeKey, _lightMode);
     notifyListeners();
   }
 
@@ -32,6 +34,7 @@ class MyState extends ChangeNotifier {
 
   void setLoggedUser(User? user) {
     _loggedUser = user;
+
     notifyListeners();
   }
 }

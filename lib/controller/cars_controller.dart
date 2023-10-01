@@ -1,20 +1,24 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/car.dart';
-import '../models/user.dart';
 import 'api_controller.dart';
 import 'database.dart';
 
 class CarState extends ChangeNotifier {
   CarState() {
-    init();
-    loadData();
+    init(
+        //user,
+        //car,
+        );
+    unawaited(loadData());
   }
   Car? _oldCar;
 
   final _listCar = <Car>[];
 
-  late User _loggedUser;
+  //late User _loggedUser;
 
   Car? car;
 
@@ -26,7 +30,10 @@ class CarState extends ChangeNotifier {
   final _controllerBrand = TextEditingController();
   final _controllerBuiltYear = TextEditingController();
   final _controllerModelYear = TextEditingController();
-  final _controllerPricePaid = TextEditingController();
+  final _controllerPricePaid = MoneyMaskedTextController(
+    decimalSeparator: '.',
+    thousandSeparator: ',',
+  );
   final _controllerPurchaseDate = TextEditingController();
   String? _controllerPhoto;
 
@@ -42,7 +49,7 @@ class CarState extends ChangeNotifier {
 
   TextEditingController get controllerModelYear => _controllerModelYear;
 
-  TextEditingController get controllerPricePaid => _controllerPricePaid;
+  MoneyMaskedTextController get controllerPricePaid => _controllerPricePaid;
 
   TextEditingController get controllerPurchaseDate => _controllerPurchaseDate;
 
@@ -58,7 +65,7 @@ class CarState extends ChangeNotifier {
   final allBrands = <String>[];
   final allModels = <String>[];
 
-  void init() async {
+  void init(/*User user, Car? vehicle*/) async {
     //_loggedUser = user;
     final result = await getBrandNames();
 
@@ -113,7 +120,7 @@ class CarState extends ChangeNotifier {
         controllerPricePaid.text.replaceAll(RegExp(r','), ''),
       ),
       purchasedDate: controllerPurchaseDate.text,
-      dealershipId: _loggedUser.id!,
+      //dealershipId: _loggedUser.id!,
     );
 
     await controller.insert(car);
@@ -166,7 +173,7 @@ class CarState extends ChangeNotifier {
       photo: controllerPhoto.toString(),
       pricePaid: double.parse(controllerPricePaid.text),
       purchasedDate: controllerPurchaseDate.text,
-      dealershipId: _loggedUser.id!,
+      //dealershipId: _loggedUser.id!,
     );
   }
 
@@ -181,7 +188,7 @@ class CarState extends ChangeNotifier {
       photo: controllerPhoto.toString(),
       pricePaid: double.parse(controllerPricePaid.text),
       purchasedDate: controllerPurchaseDate.text,
-      dealershipId: _loggedUser.id!,
+      //dealershipId: _loggedUser.id!,
     );
     await controller.update(updateCar);
 

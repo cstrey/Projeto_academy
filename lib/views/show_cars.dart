@@ -57,7 +57,7 @@ class ShowCars extends StatelessWidget {
                   IconButton(
                     onPressed: () async {
                       stateCar.updateCar(car);
-                      Navigator.push(
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => ChangeNotifierProvider.value(

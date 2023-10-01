@@ -22,6 +22,7 @@ Future<Database> getDatabase() async {
   );
 }
 
+// ignore: avoid_classes_with_only_static_members
 class TableUser {
   static const String createTable = '''
   CREATE TABLE $tableName(
@@ -29,7 +30,7 @@ class TableUser {
     $autonomy TEXT NOT NULL,
     $name     TEXT NOT NULL,
     $cnpj     INTEGER NOT NULL,
-    $password TEXT NOT NULL
+    $password TEXT NOT NULL,
     )
   ''';
 
@@ -99,7 +100,7 @@ class UserController {
   Future<void> delete(User person) async {
     final database = await getDatabase();
 
-    database.delete(
+    await database.delete(
       TableUser.tableName,
       where: '${TableUser.id} = ?',
       whereArgs: [person.id],
@@ -111,7 +112,7 @@ class UserController {
 
     final map = TableUser.toMap(person);
 
-    database.update(
+    await database.update(
       TableUser.tableName,
       map,
       where: '${TableUser.id} = ?',
@@ -121,6 +122,7 @@ class UserController {
   }
 }
 
+// ignore: avoid_classes_with_only_static_members
 class TableCars {
   static const String createTable = '''
     CREATE TABLE $tableName(
@@ -159,6 +161,7 @@ class TableCars {
     map[TableCars.photo] = car.photo;
     map[TableCars.pricePaid] = car.pricePaid;
     map[TableCars.purchasedDate] = car.purchasedDate;
+    //map[TableCars.dealershipId] = car.dealershipId;
 
     return map;
   }
@@ -195,7 +198,7 @@ class CarsController {
           photo: it[TableCars.photo],
           pricePaid: it[TableCars.pricePaid],
           purchasedDate: it[TableCars.purchasedDate],
-          dealershipId: it[TableCars.dealershipId],
+          //dealershipId: it[TableCars.dealershipId],
         ),
       );
     }
@@ -206,7 +209,7 @@ class CarsController {
   Future<void> delete(Car car) async {
     final database = await getDatabase();
 
-    database.delete(
+    await database.delete(
       TableSales.tableName,
       where: '${TableSales.id} = ?',
       whereArgs: [car.id],
@@ -218,7 +221,7 @@ class CarsController {
 
     final map = TableCars.toMap(car);
 
-    database.update(
+    await database.update(
       TableSales.tableName,
       map,
       where: '${TableSales.id} = ?',
@@ -228,6 +231,7 @@ class CarsController {
   }
 }
 
+// ignore: avoid_classes_with_only_static_members
 class TableSales {
   static const String createTable = '''
     CREATE TABLE $tableName(
@@ -264,13 +268,13 @@ class TableSales {
     map[TableSales.id] = sale.id;
     map[TableSales.customerCpf] = sale.customerCpf;
     map[TableSales.customerName] = sale.customerName;
-    map[TableSales.soldWhen] = sale.soldWhen;
+    map[TableSales.soldWhen] = sale.soldDate;
     map[TableSales.priceSold] = sale.priceSold;
     map[TableSales.dealershipCut] = sale.dealershipCut;
     map[TableSales.businessCut] = sale.businessCut;
     map[TableSales.safetyCut] = sale.safetyCut;
     map[TableSales.vehicleId] = sale.vehicleId;
-    map[TableSales.dealershipId] = sale.dealershipId;
+    //map[TableSales.dealershipId] = sale.dealershipId;
     map[TableSales.userId] = sale.userId;
 
     return map;
@@ -302,13 +306,13 @@ class SalesController {
           id: it[TableSales.id],
           customerCpf: it[TableSales.customerCpf],
           customerName: it[TableSales.customerName],
-          soldWhen: it[TableSales.soldWhen],
+          soldDate: it[TableSales.soldWhen],
           priceSold: it[TableSales.priceSold],
           dealershipCut: it[TableSales.dealershipCut],
           businessCut: it[TableSales.businessCut],
           safetyCut: it[TableSales.safetyCut],
           vehicleId: it[TableSales.vehicleId],
-          dealershipId: it[TableSales.dealershipId],
+          //dealershipId: it[TableSales.dealershipId],
           userId: it[TableSales.userId],
         ),
       );
@@ -322,7 +326,7 @@ class SalesController {
 
     final map = TableSales.toMap(sale);
 
-    database.update(
+    await database.update(
       TableSales.tableName,
       map,
       where: '${TableSales.id} = ?',

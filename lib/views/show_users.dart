@@ -44,7 +44,7 @@ class ShowUsers extends StatelessWidget {
                   IconButton(
                     onPressed: () async {
                       stateUser.updateUser(user);
-                      Navigator.push(
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => ChangeNotifierProvider.value(

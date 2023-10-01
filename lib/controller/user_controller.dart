@@ -12,6 +12,7 @@ class UserState extends ChangeNotifier {
   final _controllerPassword = TextEditingController();
   User? _oldUser;
   final _listUser = <User>[];
+  String? _controllerPhoto;
 
   TextEditingController get controllerUser => _controllerUser;
   TextEditingController get controllerAutonomy => _controllerAutonomy;
@@ -20,6 +21,7 @@ class UserState extends ChangeNotifier {
   TextEditingController get controllerPassword => _controllerPassword;
   User? get oldUser => _oldUser;
   List<User> get listUser => _listUser;
+  String? get controllerPhoto => _controllerPhoto;
 
   Future<void> insert() async {
     final person = User(
@@ -36,6 +38,7 @@ class UserState extends ChangeNotifier {
     controllerName.clear();
     controllerCnpj.clear();
     controllerPassword.clear();
+    _controllerPhoto = null;
     notifyListeners();
   }
 
@@ -82,20 +85,22 @@ class UserState extends ChangeNotifier {
     _controllerCnpj.text = person.cnpj.toString();
 
     _oldUser = User(
-        name: person.name,
-        cnpj: person.cnpj,
-        password: person.password,
-        autonomy: person.autonomy,
-        id: person.id);
+      name: person.name,
+      cnpj: person.cnpj,
+      password: person.password,
+      autonomy: person.autonomy,
+      id: person.id,
+    );
   }
 
   Future<void> update() async {
     final updateUser = User(
-        id: _oldUser?.id,
-        name: controllerName.text,
-        password: controllerPassword.text,
-        autonomy: controllerAutonomy.text,
-        cnpj: int.parse(controllerCnpj.text));
+      id: _oldUser?.id,
+      name: controllerName.text,
+      password: controllerPassword.text,
+      autonomy: controllerAutonomy.text,
+      cnpj: int.parse(controllerCnpj.text),
+    );
 
     await controller.update(updateUser);
     _oldUser = null;
@@ -103,6 +108,7 @@ class UserState extends ChangeNotifier {
     _controllerAutonomy.clear();
     _controllerName.clear();
     _controllerCnpj.clear();
+    _controllerPhoto = null;
 
     await loadData();
   }

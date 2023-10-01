@@ -32,7 +32,7 @@ class AppTextField extends StatelessWidget {
       keyboardType: inputType ?? TextInputType.text,
       readOnly: readOnly ?? false,
       decoration: InputDecoration(
-        hintText: hint ?? 'Please type here',
+        hintText: hint ?? 'Digite aqui',
         prefixIcon: icon,
         suffixIcon: obscureTextButton,
         border: const OutlineInputBorder(
