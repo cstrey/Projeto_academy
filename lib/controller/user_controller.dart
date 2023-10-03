@@ -1,10 +1,16 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models/user.dart';
 import 'database.dart';
 
 class UserState extends ChangeNotifier {
+  UserState() {
+    unawaited(loadData());
+  }
+
   final controller = UserController();
   final formKey = GlobalKey<FormState>();
+  final formKeyLogin = GlobalKey<FormState>();
   final _controllerUser = TextEditingController();
   final _controllerAutonomy = TextEditingController();
   final _controllerName = TextEditingController();
@@ -42,12 +48,13 @@ class UserState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<dynamic> getUser(String username) async {
+  Future<dynamic> getUser(String userCnpj) async {
     final database = await getDatabase();
     final List<Map<String, dynamic>> result = await database.query(
       TableUser.tableName,
+      where: '${TableUser.cnpj} = ?',
+      whereArgs: [userCnpj],
     );
-
     if (result.isNotEmpty) {
       final item = result.first;
 
@@ -91,6 +98,8 @@ class UserState extends ChangeNotifier {
       autonomy: person.autonomy,
       id: person.id,
     );
+
+    notifyListeners();
   }
 
   Future<void> update() async {
@@ -111,5 +120,10 @@ class UserState extends ChangeNotifier {
     _controllerPhoto = null;
 
     await loadData();
+  }
+
+  Future<void> clearLogin() async {
+    controllerCnpj.clear();
+    controllerPassword.clear();
   }
 }

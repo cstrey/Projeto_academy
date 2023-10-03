@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controller/user_controller.dart';
 import 'show_users.dart';
-import 'utils/choose_take_photo.dart';
 import 'utils/dropdown_autonomy.dart';
 import 'utils/form.dart';
 import 'utils/header.dart';
 import 'utils/menu_drawer.dart';
-import 'utils/photo_list.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -58,28 +56,9 @@ class RegisterPage extends StatelessWidget {
                 const AppHeader(header: 'Nível de Autonomia'),
                 DropMenu(),
                 Padding(
-                  padding: const EdgeInsets.only(
-                    top: 8,
-                    bottom: 8,
-                  ),
-                  child: stateUser.controllerPhoto != null
-                      ? const PhotosList()
-                      : Container(),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(
-                    top: 8,
-                    bottom: 8,
-                  ),
-                  child: ChooseOrTakePhoto(),
-                ),
-                Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     onPressed: () async {
-                      if (stateUser.formKey.currentState!.validate()) {
-                        return;
-                      }
                       if (stateUser.oldUser != null) {
                         stateUser.updateUser;
                         await stateUser.update();

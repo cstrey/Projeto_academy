@@ -5,15 +5,8 @@ import '../../controller/user_controller.dart';
 import '../../main.dart';
 
 class DrawerMenu extends StatelessWidget {
-  final String? shopName;
-  final String? cnpj;
-  final String? profilePicture;
-
   const DrawerMenu({
     super.key,
-    this.shopName,
-    this.cnpj,
-    this.profilePicture,
   });
 
   Text showTittle(String texto) {

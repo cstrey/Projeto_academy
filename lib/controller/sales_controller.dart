@@ -144,22 +144,22 @@ class SaleState extends ChangeNotifier {
       case 'Iniciante':
         var dealershipCut = pricePaid * 74 / 100;
         var businessCut = pricePaid * 25 / 100;
-        var safetyCut = pricePaid * 1 / 100;
+        var safetyCut = pricePaid / 100;
         break;
       case 'Intermediario':
         var dealershipCut = pricePaid * 79 / 100;
         var businessCut = pricePaid * 20 / 100;
-        var safetyCut = pricePaid * 1 / 100;
+        var safetyCut = pricePaid / 100;
         break;
       case 'Avançado':
         var dealershipCut = pricePaid * 84 / 100;
         var businessCut = pricePaid * 15 / 100;
-        var safetyCut = pricePaid * 1 / 100;
+        var safetyCut = pricePaid / 100;
         break;
       case 'Especial':
         var dealershipCut = pricePaid * 94 / 100;
         var businessCut = pricePaid * 5 / 100;
-        var safetyCut = pricePaid * 1 / 100;
+        var safetyCut = pricePaid / 100;
         break;
     }
   }

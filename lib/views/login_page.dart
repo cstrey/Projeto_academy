@@ -38,7 +38,7 @@ class LoginPage extends StatelessWidget {
         ],
       ),
       body: Form(
-        key: stateUser.formKey,
+        key: stateUser.formKeyLogin,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -57,11 +57,13 @@ class LoginPage extends StatelessWidget {
               onPressed: () async {
                 final userCnpj = stateUser.controllerCnpj.text;
                 final password = stateUser.controllerPassword.text;
+                print(userCnpj);
                 final userLogin = await stateUser.getUser(userCnpj);
-                if (stateUser.formKey.currentState!.validate()) {
+                if (stateUser.formKeyLogin.currentState!.validate()) {
                   if (userLogin != null && userLogin.password == password) {
+                    state.setLoggedUser(userLogin);
+                    await stateUser.clearLogin();
                     if (context.mounted) {
-                      state.setLoggedUser(userLogin);
                       await Navigator.of(context).pushReplacementNamed('/');
                     }
                   } else {
