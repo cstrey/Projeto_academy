@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../controller/cars_controller.dart';
+import '../controller/main_controller.dart';
 import '../models/car.dart';
 import 'register_cars.dart';
 import 'utils/menu_drawer.dart';
@@ -20,6 +21,7 @@ class ShowCars extends StatelessWidget {
   Widget build(BuildContext context) {
     final numberFormatter = NumberFormat('###,###,###.00');
     final stateCar = Provider.of<CarState>(context);
+    final state = Provider.of<MyState>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -54,6 +56,15 @@ class ShowCars extends StatelessWidget {
             trailing: IntrinsicWidth(
               child: Row(
                 children: [
+                  IconButton(
+                      onPressed: () async {
+                        await Navigator.pushReplacementNamed(
+                          context,
+                          '/registerSale',
+                          arguments: state.loggedUser,
+                        );
+                      },
+                      icon: const Icon(Icons.sell)),
                   IconButton(
                     onPressed: () async {
                       stateCar.updateCar(car);

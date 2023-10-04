@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../controller/theme_controller.dart';
+import '../../controller/main_controller.dart';
 import '../../controller/user_controller.dart';
 import '../../main.dart';
 
@@ -89,22 +89,16 @@ class DrawerMenu extends StatelessWidget {
                 },
               ),
               ListTile(
-                title: showTittle('Vendas'),
-                subtitle: const Text('Registrar uma Venda'),
-                leading: const Icon(Icons.sell),
-                iconColor: mainColor,
-                onTap: () async {
-                  await Navigator.pushReplacementNamed(
-                      context, '/registerSale');
-                },
-              ),
-              ListTile(
                 title: showTittle('Veículos'),
                 subtitle: const Text('Registrar um Veículo'),
                 leading: const Icon(Icons.car_repair),
                 iconColor: mainColor,
                 onTap: () async {
-                  await Navigator.pushReplacementNamed(context, '/registerCar');
+                  await Navigator.pushReplacementNamed(
+                    context,
+                    '/registerCar',
+                    arguments: state.loggedUser,
+                  );
                 },
               ),
               ListTile(

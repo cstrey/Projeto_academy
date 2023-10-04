@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controller/sales_controller.dart';
+import '../models/user.dart';
 import 'show_users.dart';
 import 'utils/form.dart';
 import 'utils/header.dart';
@@ -11,7 +12,9 @@ class RegisterSalePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userlogged = ModalRoute.of(context)!.settings.arguments as User;
     final stateSale = Provider.of<SaleState>(context);
+    stateSale.setLoggedUser(userlogged);
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(

@@ -8,7 +8,7 @@ class Sale {
   final double businessCut;
   final double safetyCut;
   final int vehicleId;
-  //final int dealershipId;
+  final int dealershipId;
   final int userId;
 
   Sale({
@@ -21,7 +21,7 @@ class Sale {
     required this.businessCut,
     required this.safetyCut,
     required this.vehicleId,
-    //required this.dealershipId,
+    required this.dealershipId,
     required this.userId,
   });
 }

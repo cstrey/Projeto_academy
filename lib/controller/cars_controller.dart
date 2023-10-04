@@ -3,22 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/car.dart';
+import '../models/user.dart';
 import 'api_controller.dart';
 import 'database.dart';
 
 class CarState extends ChangeNotifier {
   CarState() {
-    init(
-        //user,
-        //car,
-        );
+    init();
     unawaited(loadData());
   }
   Car? _oldCar;
 
   final _listCar = <Car>[];
 
-  //late User _loggedUser;
+  User? _loggedUser;
 
   Car? car;
 
@@ -65,8 +63,7 @@ class CarState extends ChangeNotifier {
   final allBrands = <String>[];
   final allModels = <String>[];
 
-  void init(/*User user, Car? vehicle*/) async {
-    //_loggedUser = user;
+  void init() async {
     final result = await getBrandNames();
 
     allBrands.addAll(result ?? []);
@@ -120,7 +117,7 @@ class CarState extends ChangeNotifier {
         controllerPricePaid.text.replaceAll(RegExp(r','), ''),
       ),
       purchasedDate: controllerPurchaseDate.text,
-      //dealershipId: _loggedUser.id!,
+      dealershipId: _loggedUser!.id!,
     );
 
     await controller.insert(car);
@@ -131,7 +128,7 @@ class CarState extends ChangeNotifier {
     controllerBrand.clear();
     controllerBuiltYear.clear();
     controllerModelYear.clear();
-    controllerPricePaid.clear();
+    controllerPricePaid.updateValue(0.00);
     controllerPurchaseDate.clear();
     _controllerPhoto = null;
 
@@ -173,7 +170,7 @@ class CarState extends ChangeNotifier {
       photo: controllerPhoto.toString(),
       pricePaid: double.parse(controllerPricePaid.text),
       purchasedDate: controllerPurchaseDate.text,
-      //dealershipId: _loggedUser.id!,
+      dealershipId: _loggedUser!.id!,
     );
   }
 
@@ -188,7 +185,7 @@ class CarState extends ChangeNotifier {
       photo: controllerPhoto.toString(),
       pricePaid: double.parse(controllerPricePaid.text),
       purchasedDate: controllerPurchaseDate.text,
-      //dealershipId: _loggedUser.id!,
+      dealershipId: _loggedUser!.id!,
     );
     await controller.update(updateCar);
 
@@ -223,5 +220,10 @@ class CarState extends ChangeNotifier {
       _controllerPhoto = image.path;
       notifyListeners();
     }
+  }
+
+  // ignore: use_setters_to_change_properties
+  void setLoggedUser(User? user) {
+    _loggedUser = user;
   }
 }

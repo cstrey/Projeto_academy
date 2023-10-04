@@ -14,6 +14,7 @@ Future<Database> getDatabase() async {
     path,
     onCreate: (db, version) async {
       await db.execute(TableUser.createTable);
+      await db.execute(TableCars.createTable);
       await db.execute(TableSales.createTable);
 
       await db.rawInsert(TableUser.adminUserRawInsert);
@@ -161,7 +162,7 @@ class TableCars {
     map[TableCars.photo] = car.photo;
     map[TableCars.pricePaid] = car.pricePaid;
     map[TableCars.purchasedDate] = car.purchasedDate;
-    //map[TableCars.dealershipId] = car.dealershipId;
+    map[TableCars.dealershipId] = car.dealershipId;
 
     return map;
   }
@@ -172,7 +173,7 @@ class CarsController {
     final dataBase = await getDatabase();
     final map = TableCars.toMap(car);
 
-    await dataBase.insert(TableSales.tableName, map);
+    await dataBase.insert(TableCars.tableName, map);
 
     return;
   }
@@ -181,7 +182,7 @@ class CarsController {
     final dataBase = await getDatabase();
 
     final List<Map<String, dynamic>> result = await dataBase.query(
-      TableSales.tableName,
+      TableCars.tableName,
     );
 
     var list = <Car>[];
@@ -198,7 +199,7 @@ class CarsController {
           photo: it[TableCars.photo],
           pricePaid: it[TableCars.pricePaid],
           purchasedDate: it[TableCars.purchasedDate],
-          //dealershipId: it[TableCars.dealershipId],
+          dealershipId: it[TableCars.dealershipId],
         ),
       );
     }
@@ -210,8 +211,8 @@ class CarsController {
     final database = await getDatabase();
 
     await database.delete(
-      TableSales.tableName,
-      where: '${TableSales.id} = ?',
+      TableCars.tableName,
+      where: '${TableCars.id} = ?',
       whereArgs: [car.id],
     );
   }
@@ -222,9 +223,9 @@ class CarsController {
     final map = TableCars.toMap(car);
 
     await database.update(
-      TableSales.tableName,
+      TableCars.tableName,
       map,
-      where: '${TableSales.id} = ?',
+      where: '${TableCars.id} = ?',
       whereArgs: [car.id],
     );
     return;
@@ -274,7 +275,7 @@ class TableSales {
     map[TableSales.businessCut] = sale.businessCut;
     map[TableSales.safetyCut] = sale.safetyCut;
     map[TableSales.vehicleId] = sale.vehicleId;
-    //map[TableSales.dealershipId] = sale.dealershipId;
+    map[TableSales.dealershipId] = sale.dealershipId;
     map[TableSales.userId] = sale.userId;
 
     return map;
@@ -312,7 +313,7 @@ class SalesController {
           businessCut: it[TableSales.businessCut],
           safetyCut: it[TableSales.safetyCut],
           vehicleId: it[TableSales.vehicleId],
-          //dealershipId: it[TableSales.dealershipId],
+          dealershipId: it[TableSales.dealershipId],
           userId: it[TableSales.userId],
         ),
       );

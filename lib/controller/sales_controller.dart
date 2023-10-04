@@ -15,7 +15,7 @@ class SaleState extends ChangeNotifier {
 
   final _listSale = <Sale>[];
 
-  late User _loggedUser;
+  User? _loggedUser;
 
   Sale? sale;
 
@@ -52,17 +52,17 @@ class SaleState extends ChangeNotifier {
 
   Future<void> insert() async {
     final sale = Sale(
-        businessCut: double.parse(controllerBusinessCut.text),
-        customerCpf: int.parse(controllerCustomerCpf.text),
-        customerName: controllerCustumerName.text,
-        dealershipCut: double.parse(controllerDealershipCut.text),
-        priceSold: double.parse(controllerPriceSold.text),
-        safetyCut: double.parse(controllerSafetyCut.text),
-        soldDate: DateFormat('dd/MM/yyyy').parse(controllerSoldDate.text),
-        userId: int.parse(controllerCustomerCpf.text),
-        vehicleId: int.parse(controllerVehicleId.text)
-        //dealershipId: _loggedUser.id!,
-        );
+      businessCut: double.parse(controllerBusinessCut.text),
+      customerCpf: int.parse(controllerCustomerCpf.text),
+      customerName: controllerCustumerName.text,
+      dealershipCut: double.parse(controllerDealershipCut.text),
+      priceSold: double.parse(controllerPriceSold.text),
+      safetyCut: double.parse(controllerSafetyCut.text),
+      soldDate: DateFormat('dd/MM/yyyy').parse(controllerSoldDate.text),
+      userId: int.parse(controllerCustomerCpf.text),
+      vehicleId: int.parse(controllerVehicleId.text),
+      dealershipId: _loggedUser!.id!,
+    );
 
     await controller.insert(sale);
     await loadData();
@@ -98,32 +98,32 @@ class SaleState extends ChangeNotifier {
     _controllerVehicleId.text = sale.vehicleId.toString();
 
     _oldSale = Sale(
-        businessCut: double.parse(controllerBusinessCut.text),
-        customerCpf: int.parse(controllerCustomerCpf.text),
-        customerName: controllerCustumerName.text,
-        dealershipCut: double.parse(controllerDealershipCut.text),
-        priceSold: double.parse(controllerPriceSold.text),
-        safetyCut: double.parse(controllerSafetyCut.text),
-        soldDate: DateFormat('dd/MM/yyyy').parse(controllerSoldDate.text),
-        userId: int.parse(controllerCustomerCpf.text),
-        vehicleId: int.parse(controllerCustomerCpf.text)
-        //dealershipId: _loggedUser.id!,
-        );
+      businessCut: double.parse(controllerBusinessCut.text),
+      customerCpf: int.parse(controllerCustomerCpf.text),
+      customerName: controllerCustumerName.text,
+      dealershipCut: double.parse(controllerDealershipCut.text),
+      priceSold: double.parse(controllerPriceSold.text),
+      safetyCut: double.parse(controllerSafetyCut.text),
+      soldDate: DateFormat('dd/MM/yyyy').parse(controllerSoldDate.text),
+      userId: int.parse(controllerCustomerCpf.text),
+      vehicleId: int.parse(controllerCustomerCpf.text),
+      dealershipId: _loggedUser!.id!,
+    );
   }
 
   Future<void> update() async {
     final updateSale = Sale(
-        businessCut: double.parse(controllerBusinessCut.text),
-        customerCpf: int.parse(controllerCustomerCpf.text),
-        customerName: controllerCustumerName.text,
-        dealershipCut: double.parse(controllerDealershipCut.text),
-        priceSold: double.parse(controllerPriceSold.text),
-        safetyCut: double.parse(controllerSafetyCut.text),
-        soldDate: DateFormat('dd/MM/yyyy').parse(controllerSoldDate.text),
-        userId: int.parse(controllerCustomerCpf.text),
-        vehicleId: int.parse(controllerCustomerCpf.text)
-        //dealershipId: _loggedUser.id!,
-        );
+      businessCut: double.parse(controllerBusinessCut.text),
+      customerCpf: int.parse(controllerCustomerCpf.text),
+      customerName: controllerCustumerName.text,
+      dealershipCut: double.parse(controllerDealershipCut.text),
+      priceSold: double.parse(controllerPriceSold.text),
+      safetyCut: double.parse(controllerSafetyCut.text),
+      soldDate: DateFormat('dd/MM/yyyy').parse(controllerSoldDate.text),
+      userId: int.parse(controllerCustomerCpf.text),
+      vehicleId: int.parse(controllerCustomerCpf.text),
+      dealershipId: _loggedUser!.id!,
+    );
     await controller.update(updateSale);
 
     _oldSale = null;
@@ -140,7 +140,7 @@ class SaleState extends ChangeNotifier {
   }
 
   Future<void> autonomy(double pricePaid) async {
-    switch (_loggedUser.autonomy) {
+    switch (_loggedUser!.autonomy) {
       case 'Iniciante':
         var dealershipCut = pricePaid * 74 / 100;
         var businessCut = pricePaid * 25 / 100;
@@ -162,5 +162,10 @@ class SaleState extends ChangeNotifier {
         var safetyCut = pricePaid / 100;
         break;
     }
+  }
+
+  // ignore: use_setters_to_change_properties
+  void setLoggedUser(User? user) {
+    _loggedUser = user;
   }
 }

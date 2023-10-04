@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controller/cars_controller.dart';
+import '../models/user.dart';
 import 'show_cars.dart';
 import 'utils/auto_complete.dart';
 import 'utils/choose_take_photo.dart';
@@ -14,7 +15,9 @@ class RegisterCarsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userlogged = ModalRoute.of(context)!.settings.arguments as User;
     final stateCar = Provider.of<CarState>(context);
+    stateCar.setLoggedUser(userlogged);
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
@@ -114,9 +117,6 @@ class RegisterCarsPage extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    if (stateCar.formKey.currentState!.validate()) {
-                      return;
-                    }
                     if (stateCar.oldCar != null) {
                       stateCar.updateCar;
                       await stateCar.update();
@@ -294,6 +294,7 @@ class _DateTextField extends StatelessWidget {
       controller: stateCar.controllerPurchaseDate,
       validator: validator,
       hint: '12/12/2012',
+      inputType: TextInputType.datetime,
     );
   }
 }

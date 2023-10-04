@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../controller/theme_controller.dart';
+import '../controller/main_controller.dart';
 import '../controller/user_controller.dart';
 import 'utils/form.dart';
 import 'utils/header.dart';
@@ -57,7 +57,6 @@ class LoginPage extends StatelessWidget {
               onPressed: () async {
                 final userCnpj = stateUser.controllerCnpj.text;
                 final password = stateUser.controllerPassword.text;
-                print(userCnpj);
                 final userLogin = await stateUser.getUser(userCnpj);
                 if (stateUser.formKeyLogin.currentState!.validate()) {
                   if (userLogin != null && userLogin.password == password) {
