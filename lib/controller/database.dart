@@ -244,12 +244,13 @@ class TableSales {
       $dealershipCut  REAL NOT NULL,
       $businessCut    REAL NOT NULL,
       $safetyCut      REAL NOT NULL,
-      $vehicleId      INTERGER NOT NULL,
+      
       $dealershipId   INTEGER NOT NULL,
       $userId         INTEGER NOT NULL
     );
   ''';
 
+  // $vehicleId      INTERGER NOT NULL,
   static const String tableName = 'sale';
   static const String id = 'id';
   static const String customerCpf = 'customer_cpf';
@@ -259,7 +260,7 @@ class TableSales {
   static const String dealershipCut = 'dealership_cut';
   static const String businessCut = 'business_cut';
   static const String safetyCut = 'safety_cut';
-  static const String vehicleId = 'vehicle_id';
+  //static const String vehicleId = 'vehicle_id';
   static const String dealershipId = 'dealership_id';
   static const String userId = 'user_id';
 
@@ -274,7 +275,7 @@ class TableSales {
     map[TableSales.dealershipCut] = sale.dealershipCut;
     map[TableSales.businessCut] = sale.businessCut;
     map[TableSales.safetyCut] = sale.safetyCut;
-    map[TableSales.vehicleId] = sale.vehicleId;
+    //map[TableSales.vehicleId] = sale.vehicleId;
     map[TableSales.dealershipId] = sale.dealershipId;
     map[TableSales.userId] = sale.userId;
 
@@ -312,7 +313,7 @@ class SalesController {
           dealershipCut: it[TableSales.dealershipCut],
           businessCut: it[TableSales.businessCut],
           safetyCut: it[TableSales.safetyCut],
-          vehicleId: it[TableSales.vehicleId],
+          //vehicleId: it[TableSales.vehicleId],
           dealershipId: it[TableSales.dealershipId],
           userId: it[TableSales.userId],
         ),

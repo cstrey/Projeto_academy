@@ -1,8 +1,5 @@
-// ignore_for_file: unused_local_variable
-
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../models/sales.dart';
 import '../models/user.dart';
 import 'database.dart';
@@ -18,6 +15,12 @@ class SaleState extends ChangeNotifier {
   User? _loggedUser;
 
   Sale? sale;
+
+  double? dealershipCut;
+
+  double? businessCut;
+
+  double? safetyCut;
 
   final controller = SalesController();
   final formKey = GlobalKey<FormState>();
@@ -52,15 +55,15 @@ class SaleState extends ChangeNotifier {
 
   Future<void> insert() async {
     final sale = Sale(
-      businessCut: double.parse(controllerBusinessCut.text),
+      businessCut: businessCut!,
       customerCpf: int.parse(controllerCustomerCpf.text),
       customerName: controllerCustumerName.text,
-      dealershipCut: double.parse(controllerDealershipCut.text),
+      dealershipCut: dealershipCut!,
       priceSold: double.parse(controllerPriceSold.text),
-      safetyCut: double.parse(controllerSafetyCut.text),
-      soldDate: DateFormat('dd/MM/yyyy').parse(controllerSoldDate.text),
+      safetyCut: safetyCut!,
+      soldDate: controllerSoldDate.text,
       userId: int.parse(controllerCustomerCpf.text),
-      vehicleId: int.parse(controllerVehicleId.text),
+      //vehicleId: int.parse(controllerVehicleId.text),
       dealershipId: _loggedUser!.id!,
     );
 
@@ -95,7 +98,7 @@ class SaleState extends ChangeNotifier {
     _controllerPriceSold.text = sale.priceSold.toString();
     _controllerSafetyCut.text = sale.safetyCut.toString();
     _controllerSoldDate.text = sale.soldDate.toString();
-    _controllerVehicleId.text = sale.vehicleId.toString();
+    //_controllerVehicleId.text = sale.vehicleId.toString();
 
     _oldSale = Sale(
       businessCut: double.parse(controllerBusinessCut.text),
@@ -104,9 +107,9 @@ class SaleState extends ChangeNotifier {
       dealershipCut: double.parse(controllerDealershipCut.text),
       priceSold: double.parse(controllerPriceSold.text),
       safetyCut: double.parse(controllerSafetyCut.text),
-      soldDate: DateFormat('dd/MM/yyyy').parse(controllerSoldDate.text),
+      soldDate: controllerSoldDate.text,
       userId: int.parse(controllerCustomerCpf.text),
-      vehicleId: int.parse(controllerCustomerCpf.text),
+      //vehicleId: int.parse(controllerCustomerCpf.text),
       dealershipId: _loggedUser!.id!,
     );
   }
@@ -119,9 +122,9 @@ class SaleState extends ChangeNotifier {
       dealershipCut: double.parse(controllerDealershipCut.text),
       priceSold: double.parse(controllerPriceSold.text),
       safetyCut: double.parse(controllerSafetyCut.text),
-      soldDate: DateFormat('dd/MM/yyyy').parse(controllerSoldDate.text),
+      soldDate: controllerSoldDate.text,
       userId: int.parse(controllerCustomerCpf.text),
-      vehicleId: int.parse(controllerCustomerCpf.text),
+      //vehicleId: int.parse(controllerCustomerCpf.text),
       dealershipId: _loggedUser!.id!,
     );
     await controller.update(updateSale);
@@ -142,24 +145,24 @@ class SaleState extends ChangeNotifier {
   Future<void> autonomy(double pricePaid) async {
     switch (_loggedUser!.autonomy) {
       case 'Iniciante':
-        var dealershipCut = pricePaid * 74 / 100;
-        var businessCut = pricePaid * 25 / 100;
-        var safetyCut = pricePaid / 100;
+        dealershipCut = pricePaid * 74 / 100;
+        businessCut = pricePaid * 25 / 100;
+        safetyCut = pricePaid / 100;
         break;
       case 'Intermediario':
-        var dealershipCut = pricePaid * 79 / 100;
-        var businessCut = pricePaid * 20 / 100;
-        var safetyCut = pricePaid / 100;
+        dealershipCut = pricePaid * 79 / 100;
+        businessCut = pricePaid * 20 / 100;
+        safetyCut = pricePaid / 100;
         break;
       case 'Avançado':
-        var dealershipCut = pricePaid * 84 / 100;
-        var businessCut = pricePaid * 15 / 100;
-        var safetyCut = pricePaid / 100;
+        dealershipCut = pricePaid * 84 / 100;
+        businessCut = pricePaid * 15 / 100;
+        safetyCut = pricePaid / 100;
         break;
       case 'Especial':
-        var dealershipCut = pricePaid * 94 / 100;
-        var businessCut = pricePaid * 5 / 100;
-        var safetyCut = pricePaid / 100;
+        dealershipCut = pricePaid * 94 / 100;
+        businessCut = pricePaid * 5 / 100;
+        safetyCut = pricePaid / 100;
         break;
     }
   }

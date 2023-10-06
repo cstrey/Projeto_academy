@@ -85,7 +85,7 @@ class DrawerMenu extends StatelessWidget {
                 leading: const Icon(Icons.shopping_bag),
                 iconColor: mainColor,
                 onTap: () async {
-                  await Navigator.pushReplacementNamed(context, '/');
+                  await Navigator.pushReplacementNamed(context, '/sales');
                 },
               ),
               ListTile(

@@ -8,6 +8,7 @@ class UserState extends ChangeNotifier {
     unawaited(loadData());
   }
 
+  String? _autonomyLevel;
   final controller = UserController();
   final formKey = GlobalKey<FormState>();
   final formKeyLogin = GlobalKey<FormState>();
@@ -21,17 +22,23 @@ class UserState extends ChangeNotifier {
   String? _controllerPhoto;
 
   TextEditingController get controllerUser => _controllerUser;
-  TextEditingController get controllerAutonomy => _controllerAutonomy;
   TextEditingController get controllerName => _controllerName;
   TextEditingController get controllerCnpj => _controllerCnpj;
   TextEditingController get controllerPassword => _controllerPassword;
   User? get oldUser => _oldUser;
   List<User> get listUser => _listUser;
   String? get controllerPhoto => _controllerPhoto;
+  String? get autonomyLevel => _autonomyLevel;
+
+  set autonomyLevel(String? value) {
+    _autonomyLevel = value;
+
+    notifyListeners();
+  }
 
   Future<void> insert() async {
     final person = User(
-      autonomy: controllerAutonomy.text,
+      autonomy: autonomyLevel,
       name: controllerName.text,
       cnpj: int.parse(controllerCnpj.text),
       password: controllerPassword.text,
@@ -40,7 +47,7 @@ class UserState extends ChangeNotifier {
     await controller.insert(person);
     await loadData();
 
-    controllerAutonomy.clear();
+    autonomyLevel = null;
     controllerName.clear();
     controllerCnpj.clear();
     controllerPassword.clear();
@@ -63,6 +70,7 @@ class UserState extends ChangeNotifier {
         cnpj: item[TableUser.cnpj],
         name: item[TableUser.name],
         password: item[TableUser.password],
+        autonomy: item[TableUser.autonomy],
       );
     }
 
@@ -107,7 +115,7 @@ class UserState extends ChangeNotifier {
       id: _oldUser?.id,
       name: controllerName.text,
       password: controllerPassword.text,
-      autonomy: controllerAutonomy.text,
+      autonomy: autonomyLevel,
       cnpj: int.parse(controllerCnpj.text),
     );
 

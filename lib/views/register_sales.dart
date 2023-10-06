@@ -32,61 +32,58 @@ class RegisterSalePage extends StatelessWidget {
         title: const Text('Registre Uma Venda'),
       ),
       drawer: const DrawerMenu(),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Form(
-          key: stateSale.formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const AppHeader(header: 'Nome do comprador'),
-                const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: _NameTextField(),
+      body: Form(
+        key: stateSale.formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const AppHeader(header: 'Nome do comprador'),
+              const Padding(
+                padding: EdgeInsets.all(8),
+                child: _NameTextField(),
+              ),
+              const AppHeader(header: 'CPF do comprador'),
+              const Padding(
+                padding: EdgeInsets.all(8),
+                child: _CpfTextField(),
+              ),
+              const AppHeader(header: 'Sold Date'),
+              const Padding(
+                padding: EdgeInsets.all(8),
+                child: _DateTextField(),
+              ),
+              const AppHeader(header: 'Valor da Venda'),
+              const Padding(
+                padding: EdgeInsets.all(8),
+                child: _PriceTextField(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final pricePaid = stateSale.controllerPriceSold.text;
+                    await stateSale.autonomy(double.parse(pricePaid));
+
+                    if (stateSale.oldSale != null) {
+                      stateSale.updateSale;
+                      await stateSale.update();
+                    } else {
+                      await stateSale.insert();
+                    }
+                    if (context.mounted) {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ShowUsers(),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text('Cadastrar'),
                 ),
-                const AppHeader(header: 'CPF do comprador'),
-                const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: _CpfTextField(),
-                ),
-                const AppHeader(header: 'Sold Date'),
-                const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: _DateTextField(),
-                ),
-                const AppHeader(header: 'Valor da Venda'),
-                const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: _PriceTextField(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (stateSale.formKey.currentState!.validate()) {
-                        return;
-                      }
-                      if (stateSale.oldSale != null) {
-                        stateSale.updateSale;
-                        await stateSale.update();
-                      } else {
-                        await stateSale.insert();
-                      }
-                      if (context.mounted) {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ShowUsers(),
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text('Cadastrar'),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -123,7 +120,7 @@ class _CpfTextField extends StatelessWidget {
   String? validator(String? value) {
     if (value == null || value.isEmpty) {
       return 'Por favor, informe um CNPJ válido.';
-    } else if (value.length < 14 || value.length > 14) {
+    } else if (value.length < 11 || value.length > 11) {
       return 'cpf deve conter 11 digitos';
     }
     return null;

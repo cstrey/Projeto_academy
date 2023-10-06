@@ -10,6 +10,7 @@ import 'views/register_cars.dart';
 import 'views/register_page.dart';
 import 'views/register_sales.dart';
 import 'views/show_cars.dart';
+import 'views/show_sales.dart';
 import 'views/show_users.dart';
 
 const Color mainColor = Color.fromARGB(255, 57, 57, 196);
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
               '/registerSale': (context) => const RegisterSalePage(),
               '/users': (context) => const ShowUsers(),
               '/cars': (context) => const ShowCars(),
+              '/sales': (context) => const ShowSales(),
             },
           );
         },

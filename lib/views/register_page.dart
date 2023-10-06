@@ -30,55 +30,52 @@ class RegisterPage extends StatelessWidget {
         title: const Text('Registre Sua Loja'),
       ),
       drawer: const DrawerMenu(),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Form(
-          key: stateUser.formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const AppHeader(header: 'Name'),
-                const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: _NameTextField(),
+      body: Form(
+        key: stateUser.formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const AppHeader(header: 'Name'),
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: _NameTextField(),
+              ),
+              const AppHeader(header: 'CNPJ'),
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: _CnpjTextField(),
+              ),
+              const AppHeader(header: 'Senha'),
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: _PasswordTextField(),
+              ),
+              const AppHeader(header: 'Nível de Autonomia'),
+              DropMenu(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (stateUser.oldUser != null) {
+                      stateUser.updateUser;
+                      await stateUser.update();
+                    } else {
+                      await stateUser.insert();
+                    }
+                    if (context.mounted) {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ShowUsers(),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text('Cadastrar'),
                 ),
-                const AppHeader(header: 'CNPJ'),
-                const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: _CnpjTextField(),
-                ),
-                const AppHeader(header: 'Senha'),
-                const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: _PasswordTextField(),
-                ),
-                const AppHeader(header: 'Nível de Autonomia'),
-                DropMenu(),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (stateUser.oldUser != null) {
-                        stateUser.updateUser;
-                        await stateUser.update();
-                      } else {
-                        await stateUser.insert();
-                      }
-                      if (context.mounted) {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ShowUsers(),
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text('Cadastrar'),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
