@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controller/sales_controller.dart';
 import '../models/user.dart';
-import 'show_users.dart';
+import 'show_sales.dart';
 import 'utils/form.dart';
 import 'utils/header.dart';
 import 'utils/menu_drawer.dart';
@@ -12,80 +12,85 @@ class RegisterSalePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userlogged = ModalRoute.of(context)!.settings.arguments as User;
-    final stateSale = Provider.of<SaleState>(context);
-    stateSale.setLoggedUser(userlogged);
-    return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Color(0xff00456A),
-                Color(0xff051937),
-              ],
-            ),
-          ),
-        ),
-        title: const Text('Registre Uma Venda'),
-      ),
-      drawer: const DrawerMenu(),
-      body: Form(
-        key: stateSale.formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const AppHeader(header: 'Nome do comprador'),
-              const Padding(
-                padding: EdgeInsets.all(8),
-                child: _NameTextField(),
-              ),
-              const AppHeader(header: 'CPF do comprador'),
-              const Padding(
-                padding: EdgeInsets.all(8),
-                child: _CpfTextField(),
-              ),
-              const AppHeader(header: 'Sold Date'),
-              const Padding(
-                padding: EdgeInsets.all(8),
-                child: _DateTextField(),
-              ),
-              const AppHeader(header: 'Valor da Venda'),
-              const Padding(
-                padding: EdgeInsets.all(8),
-                child: _PriceTextField(),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    final pricePaid = stateSale.controllerPriceSold.text;
-                    await stateSale.autonomy(double.parse(pricePaid));
-
-                    if (stateSale.oldSale != null) {
-                      stateSale.updateSale;
-                      await stateSale.update();
-                    } else {
-                      await stateSale.insert();
-                    }
-                    if (context.mounted) {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ShowUsers(),
-                        ),
-                      );
-                    }
-                  },
-                  child: const Text('Cadastrar'),
+    final userLogged = ModalRoute.of(context)!.settings.arguments as User;
+    return ChangeNotifierProvider(
+      create: (context) => SaleState(userLogged),
+      child: Consumer<SaleState>(
+        builder: (context, stateSale, value) {
+          return Scaffold(
+            appBar: AppBar(
+              flexibleSpace: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [
+                      Color(0xff00456A),
+                      Color(0xff051937),
+                    ],
+                  ),
                 ),
               ),
-            ],
-          ),
-        ),
+              title: const Text('Registre Uma Venda'),
+            ),
+            drawer: const DrawerMenu(),
+            body: Form(
+              key: stateSale.formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const AppHeader(header: 'Nome do comprador'),
+                    const Padding(
+                      padding: EdgeInsets.all(8),
+                      child: _NameTextField(),
+                    ),
+                    const AppHeader(header: 'CPF do comprador'),
+                    const Padding(
+                      padding: EdgeInsets.all(8),
+                      child: _CpfTextField(),
+                    ),
+                    const AppHeader(header: 'Sold Date'),
+                    const Padding(
+                      padding: EdgeInsets.all(8),
+                      child: _DateTextField(),
+                    ),
+                    const AppHeader(header: 'Valor da Venda'),
+                    const Padding(
+                      padding: EdgeInsets.all(8),
+                      child: _PriceTextField(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          final pricePaid = stateSale.controllerPriceSold.text;
+                          await stateSale.autonomy(double.parse(pricePaid));
+
+                          if (stateSale.oldSale != null) {
+                            stateSale.updateSale;
+                            await stateSale.update();
+                          } else {
+                            await stateSale.insert();
+                          }
+                          if (context.mounted) {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ShowSales(),
+                              ),
+                            );
+                          }
+                        },
+                        child: const Text('Cadastrar'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

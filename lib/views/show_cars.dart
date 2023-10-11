@@ -20,83 +20,95 @@ class ShowCars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final numberFormatter = NumberFormat('###,###,###.00');
-    final stateCar = Provider.of<CarState>(context);
     final state = Provider.of<MyState>(context);
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Color(0xff00456A),
-                Color(0xff051937),
-              ],
+    return ChangeNotifierProvider(
+      create: (context) => CarState(state.loggedUser!),
+      child: Consumer<CarState>(
+        builder: (context, stateCar, value) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              flexibleSpace: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [
+                      Color(0xff00456A),
+                      Color(0xff051937),
+                    ],
+                  ),
+                ),
+              ),
+              title: Text(title),
             ),
-          ),
-        ),
-        title: Text(title),
-      ),
-      body: ListView.builder(
-        itemCount: stateCar.listCar.length,
-        itemBuilder: (context, index) {
-          final car = stateCar.listCar[index];
-          return ListTile(
-            leading: Image.file(
-              File(car.photo),
-            ),
-            title: Text(
-              '${car.modelYear}'
-              ' ${car.brand.toUpperCase()}'
-              ' ${car.model.toUpperCase()}',
-            ),
-            subtitle: Text('R\$${numberFormatter.format(car.pricePaid)}'),
-            trailing: IntrinsicWidth(
-              child: Row(
-                children: [
-                  IconButton(
-                      onPressed: () async {
-                        await Navigator.pushReplacementNamed(
-                          context,
-                          '/registerSale',
-                          arguments: state.loggedUser,
-                        );
-                      },
-                      icon: const Icon(Icons.sell)),
-                  IconButton(
-                    onPressed: () async {
-                      stateCar.updateCar(car);
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChangeNotifierProvider.value(
-                            value: stateCar,
-                            child: const RegisterCarsPage(),
+            body: stateCar.loading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    itemCount: stateCar.listCar.length,
+                    itemBuilder: (context, index) {
+                      final car = stateCar.listCar[index];
+                      return ListTile(
+                        leading: Image.file(
+                          File(car.photo),
+                        ),
+                        title: Text(
+                          '${car.modelYear}'
+                          ' ${car.brand.toUpperCase()}'
+                          ' ${car.model.toUpperCase()}',
+                        ),
+                        subtitle:
+                            Text('R\$${numberFormatter.format(car.pricePaid)}'),
+                        trailing: IntrinsicWidth(
+                          child: Row(
+                            children: [
+                              IconButton(
+                                  onPressed: () async {
+                                    await Navigator.pushReplacementNamed(
+                                      context,
+                                      '/registerSale',
+                                      arguments: state.loggedUser,
+                                    );
+                                  },
+                                  icon: const Icon(Icons.sell)),
+                              IconButton(
+                                onPressed: () async {
+                                  stateCar.updateCar(car);
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ChangeNotifierProvider.value(
+                                        value: stateCar,
+                                        child: const RegisterCarsPage(),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.edit,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  await stateCar.delete(car);
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       );
                     },
-                    icon: const Icon(
-                      Icons.edit,
-                    ),
                   ),
-                  IconButton(
-                    onPressed: () async {
-                      await stateCar.delete(car);
-                    },
-                    icon: const Icon(
-                      Icons.delete,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            drawer: const DrawerMenu(),
           );
         },
       ),
-      drawer: const DrawerMenu(),
     );
   }
 }

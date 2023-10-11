@@ -57,19 +57,21 @@ class RegisterPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (stateUser.oldUser != null) {
-                      stateUser.updateUser;
-                      await stateUser.update();
-                    } else {
-                      await stateUser.insert();
-                    }
-                    if (context.mounted) {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ShowUsers(),
-                        ),
-                      );
+                    if (stateUser.formKey.currentState!.validate()) {
+                      if (stateUser.oldUser != null) {
+                        stateUser.updateUser;
+                        await stateUser.update();
+                      } else {
+                        await stateUser.insert();
+                      }
+                      if (context.mounted) {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ShowUsers(),
+                          ),
+                        );
+                      }
                     }
                   },
                   child: const Text('Cadastrar'),
@@ -145,6 +147,7 @@ class _PasswordTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final stateUser = Provider.of<UserState>(context, listen: true);
     return AppTextField(
+      obscureText: true,
       controller: stateUser.controllerPassword,
       validator: validator,
       hint: '*****',

@@ -61,15 +61,16 @@ class DrawerMenu extends StatelessWidget {
                   await Navigator.pushReplacementNamed(context, '/');
                 },
               ),
-              ListTile(
-                title: showTittle('Gerenciar Usuários'),
-                subtitle: const Text('Visualizar Usuários'),
-                leading: const Icon(Icons.person_2),
-                iconColor: mainColor,
-                onTap: () async {
-                  await Navigator.pushReplacementNamed(context, '/users');
-                },
-              ),
+              if (state.loggedUser!.id == 1)
+                ListTile(
+                  title: showTittle('Gerenciar Usuários'),
+                  subtitle: const Text('Visualizar Usuários'),
+                  leading: const Icon(Icons.person_2),
+                  iconColor: mainColor,
+                  onTap: () async {
+                    await Navigator.pushReplacementNamed(context, '/users');
+                  },
+                ),
               ListTile(
                 title: showTittle('Gerenciar Veículos'),
                 subtitle: const Text('Visualizar Veículos'),
@@ -101,15 +102,16 @@ class DrawerMenu extends StatelessWidget {
                   );
                 },
               ),
-              ListTile(
-                title: showTittle('Usuários'),
-                subtitle: const Text('Registrar um usuário'),
-                leading: const Icon(Icons.app_registration),
-                iconColor: mainColor,
-                onTap: () async {
-                  await Navigator.pushReplacementNamed(context, '/register');
-                },
-              ),
+              if (state.loggedUser!.id == 1)
+                ListTile(
+                  title: showTittle('Usuários'),
+                  subtitle: const Text('Registrar um usuário'),
+                  leading: const Icon(Icons.app_registration),
+                  iconColor: mainColor,
+                  onTap: () async {
+                    await Navigator.pushReplacementNamed(context, '/register');
+                  },
+                ),
               ListTile(
                 title: showTittle('Logout'),
                 subtitle: const Text('Sair do aplicativo'),

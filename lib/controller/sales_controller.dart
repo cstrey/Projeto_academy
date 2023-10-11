@@ -5,14 +5,17 @@ import '../models/user.dart';
 import 'database.dart';
 
 class SaleState extends ChangeNotifier {
-  SaleState() {
+  SaleState(this.loggedUser) {
     unawaited(loadData());
   }
+
+  bool loading = true;
+
   Sale? _oldSale;
 
   final _listSale = <Sale>[];
 
-  User? _loggedUser;
+  final User loggedUser;
 
   Sale? sale;
 
@@ -21,6 +24,8 @@ class SaleState extends ChangeNotifier {
   double? businessCut;
 
   double? safetyCut;
+
+  int? _dealershipController;
 
   final controller = SalesController();
   final formKey = GlobalKey<FormState>();
@@ -31,7 +36,7 @@ class SaleState extends ChangeNotifier {
   final _controllerDealershipCut = TextEditingController();
   final _controllerBusinessCut = TextEditingController();
   final _controllerSafetyCut = TextEditingController();
-  final _controllerVehicleId = TextEditingController();
+  //int? _controllerCarId;
 
   TextEditingController get controllerCustomerCpf => _controllerCustomerCpf;
 
@@ -47,11 +52,11 @@ class SaleState extends ChangeNotifier {
 
   TextEditingController get controllerSafetyCut => _controllerSafetyCut;
 
-  TextEditingController get controllerVehicleId => _controllerVehicleId;
-
   Sale? get oldSale => _oldSale;
 
   List<Sale> get listSale => _listSale;
+
+  int? get dealershipController => _dealershipController;
 
   Future<void> insert() async {
     final sale = Sale(
@@ -63,8 +68,8 @@ class SaleState extends ChangeNotifier {
       safetyCut: safetyCut!,
       soldDate: controllerSoldDate.text,
       userId: int.parse(controllerCustomerCpf.text),
-      //vehicleId: int.parse(controllerVehicleId.text),
-      dealershipId: _loggedUser!.id!,
+      //vehicleId: _controllerCarId!,
+      dealershipId: loggedUser.id!,
     );
 
     await controller.insert(sale);
@@ -77,17 +82,31 @@ class SaleState extends ChangeNotifier {
     controllerPriceSold.clear();
     controllerSafetyCut.clear();
     controllerSoldDate.clear();
-    controllerVehicleId.clear();
+    //_controllerCarId = null;
 
     notifyListeners();
   }
 
   Future<void> loadData() async {
-    final list = await controller.select();
+    loading = true;
 
-    listSale
+    var dealershipId = 0;
+
+    loggedUser.id == 1
+        ? dealershipId = _dealershipController ?? 1
+        : dealershipId = loggedUser.id!;
+
+    final result = await controller.selectByDealership(dealershipId);
+
+    //result.removeWhere((element) => element.isSold == true);
+
+    _listSale
       ..clear()
-      ..addAll(list);
+      ..addAll(result.reversed);
+
+    loading = false;
+
+    notifyListeners();
   }
 
   void updateSale(Sale sale) {
@@ -98,7 +117,7 @@ class SaleState extends ChangeNotifier {
     _controllerPriceSold.text = sale.priceSold.toString();
     _controllerSafetyCut.text = sale.safetyCut.toString();
     _controllerSoldDate.text = sale.soldDate.toString();
-    //_controllerVehicleId.text = sale.vehicleId.toString();
+    //_controllerCarId = sale.vehicleId;
 
     _oldSale = Sale(
       businessCut: double.parse(controllerBusinessCut.text),
@@ -108,9 +127,9 @@ class SaleState extends ChangeNotifier {
       priceSold: double.parse(controllerPriceSold.text),
       safetyCut: double.parse(controllerSafetyCut.text),
       soldDate: controllerSoldDate.text,
-      userId: int.parse(controllerCustomerCpf.text),
-      //vehicleId: int.parse(controllerCustomerCpf.text),
-      dealershipId: _loggedUser!.id!,
+      userId: loggedUser.id!,
+      //vehicleId: _controllerCarId!,
+      dealershipId: loggedUser.id!,
     );
   }
 
@@ -124,8 +143,8 @@ class SaleState extends ChangeNotifier {
       safetyCut: double.parse(controllerSafetyCut.text),
       soldDate: controllerSoldDate.text,
       userId: int.parse(controllerCustomerCpf.text),
-      //vehicleId: int.parse(controllerCustomerCpf.text),
-      dealershipId: _loggedUser!.id!,
+      //vehicleId: ,
+      dealershipId: loggedUser.id!,
     );
     await controller.update(updateSale);
 
@@ -137,13 +156,13 @@ class SaleState extends ChangeNotifier {
     controllerPriceSold.clear();
     controllerSafetyCut.clear();
     controllerSoldDate.clear();
-    controllerVehicleId.clear();
+    //_controllerCarId = null;
 
     await loadData();
   }
 
   Future<void> autonomy(double pricePaid) async {
-    switch (_loggedUser!.autonomy) {
+    switch (loggedUser.autonomy) {
       case 'Iniciante':
         dealershipCut = pricePaid * 74 / 100;
         businessCut = pricePaid * 25 / 100;
@@ -165,10 +184,5 @@ class SaleState extends ChangeNotifier {
         safetyCut = pricePaid / 100;
         break;
     }
-  }
-
-  // ignore: use_setters_to_change_properties
-  void setLoggedUser(User? user) {
-    _loggedUser = user;
   }
 }

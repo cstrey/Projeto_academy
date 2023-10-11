@@ -8,17 +8,23 @@ import 'api_controller.dart';
 import 'database.dart';
 
 class CarState extends ChangeNotifier {
-  CarState() {
+  CarState(this.loggedUser) {
     init();
-    unawaited(loadData());
   }
+
+  final User loggedUser;
+
   Car? _oldCar;
 
   final _listCar = <Car>[];
 
-  User? _loggedUser;
-
   Car? car;
+
+  bool loading = true;
+
+  String? _controllerPhoto;
+
+  int? _dealershipController;
 
   final controller = CarsController();
   final formKey = GlobalKey<FormState>();
@@ -33,7 +39,6 @@ class CarState extends ChangeNotifier {
     thousandSeparator: ',',
   );
   final _controllerPurchaseDate = TextEditingController();
-  String? _controllerPhoto;
 
   TextEditingController get controllerCar => _controllerCar;
 
@@ -57,6 +62,8 @@ class CarState extends ChangeNotifier {
 
   List<Car> get listCar => _listCar;
 
+  int? get dealershipController => _dealershipController;
+
   final modelFieldFocusNode = FocusNode();
   final brandFieldFocusNode = FocusNode();
 
@@ -64,6 +71,8 @@ class CarState extends ChangeNotifier {
   final allModels = <String>[];
 
   void init() async {
+    loading = true;
+    await loadData();
     final result = await getBrandNames();
 
     allBrands.addAll(result ?? []);
@@ -73,10 +82,19 @@ class CarState extends ChangeNotifier {
         if (modelFieldFocusNode.hasFocus) {
           final result = await getModelsByBrand(controllerBrand.text);
           allModels.addAll(result!);
-          notifyListeners();
         }
       },
     );
+
+    loading = false;
+    notifyListeners();
+  }
+
+  void setDealership(User user) async {
+    _dealershipController = user.id!;
+    await loadData();
+
+    notifyListeners();
   }
 
   Future<List<String>?> getBrandNames() async {
@@ -117,7 +135,7 @@ class CarState extends ChangeNotifier {
         controllerPricePaid.text.replaceAll(RegExp(r','), ''),
       ),
       purchasedDate: controllerPurchaseDate.text,
-      dealershipId: _loggedUser!.id!,
+      dealershipId: loggedUser.id!,
     );
 
     await controller.insert(car);
@@ -136,11 +154,25 @@ class CarState extends ChangeNotifier {
   }
 
   Future<void> loadData() async {
-    final list = await controller.select();
+    loading = true;
 
-    listCar
+    var dealershipId = 0;
+
+    loggedUser.id == 1
+        ? dealershipId = _dealershipController ?? 1
+        : dealershipId = loggedUser.id!;
+
+    final result = await controller.selectByDealership(dealershipId);
+
+    result.removeWhere((element) => element.isSold == true);
+
+    _listCar
       ..clear()
-      ..addAll(list);
+      ..addAll(result.reversed);
+
+    loading = false;
+
+    notifyListeners();
   }
 
   Future<void> delete(Car car) async {
@@ -168,9 +200,11 @@ class CarState extends ChangeNotifier {
       builtYear: int.parse(controllerBuiltYear.text),
       modelYear: int.parse(controllerModelYear.text),
       photo: controllerPhoto.toString(),
-      pricePaid: double.parse(controllerPricePaid.text),
+      pricePaid: double.parse(
+        controllerPricePaid.text.replaceAll(RegExp(r','), ''),
+      ),
       purchasedDate: controllerPurchaseDate.text,
-      dealershipId: _loggedUser!.id!,
+      dealershipId: loggedUser.id!,
     );
   }
 
@@ -183,9 +217,11 @@ class CarState extends ChangeNotifier {
       builtYear: int.parse(controllerBuiltYear.text),
       modelYear: int.parse(controllerModelYear.text),
       photo: controllerPhoto.toString(),
-      pricePaid: double.parse(controllerPricePaid.text),
+      pricePaid: double.parse(
+        controllerPricePaid.text.replaceAll(RegExp(r','), ''),
+      ),
       purchasedDate: controllerPurchaseDate.text,
-      dealershipId: _loggedUser!.id!,
+      dealershipId: loggedUser.id!,
     );
     await controller.update(updateCar);
 
@@ -220,10 +256,5 @@ class CarState extends ChangeNotifier {
       _controllerPhoto = image.path;
       notifyListeners();
     }
-  }
-
-  // ignore: use_setters_to_change_properties
-  void setLoggedUser(User? user) {
-    _loggedUser = user;
   }
 }

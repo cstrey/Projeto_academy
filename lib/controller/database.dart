@@ -98,6 +98,29 @@ class UserController {
     return list;
   }
 
+  Future<List<User>> selectAll() async {
+    final database = await getDatabase();
+
+    final List<Map<String, dynamic>> result = await database.query(
+      TableUser.tableName,
+    );
+
+    var list = <User>[];
+
+    for (final item in result) {
+      list.add(
+        User(
+          id: item[TableUser.id],
+          cnpj: item[TableUser.cnpj],
+          name: item[TableUser.name],
+          password: item[TableUser.password],
+          //isActive: item[TableUser.isActive] == 1 ? true : false,
+        ),
+      );
+    }
+    return list;
+  }
+
   Future<void> delete(User person) async {
     final database = await getDatabase();
 
@@ -169,6 +192,63 @@ class TableCars {
 }
 
 class CarsController {
+  Future<List<Car>> selectByDealership(int dealershipId) async {
+    final database = await getDatabase();
+
+    final List<Map<String, dynamic>> result = await database.query(
+      TableCars.tableName,
+      where: '${TableCars.dealershipId} = ?',
+      whereArgs: [dealershipId],
+    );
+
+    var list = <Car>[];
+
+    for (final item in result) {
+      list.add(
+        Car(
+          id: item[TableCars.id],
+          model: item[TableCars.model],
+          brand: item[TableCars.brand],
+          builtYear: item[TableCars.builtYear],
+          plate: item[TableCars.plate],
+          modelYear: item[TableCars.modelYear],
+          photo: (item[TableCars.photo]).toString(),
+          pricePaid: item[TableCars.pricePaid],
+          purchasedDate: item[TableCars.purchasedDate],
+          dealershipId: item[TableCars.dealershipId],
+          //isSold: item[TableCars.isSold] == 1 ? true : false,
+        ),
+      );
+    }
+    return list;
+  }
+
+  Future<List<Car>> selectList() async {
+    final database = await getDatabase();
+    final List<Map<String, dynamic>> result =
+        await database.query(TableCars.tableName);
+
+    var list = <Car>[];
+
+    for (var it in result) {
+      list.add(
+        Car(
+          id: it[TableCars.id],
+          model: it[TableCars.model],
+          brand: it[TableCars.brand],
+          builtYear: it[TableCars.builtYear],
+          plate: it[TableCars.plate],
+          modelYear: it[TableCars.modelYear],
+          photo: it[TableCars.photo],
+          pricePaid: it[TableCars.pricePaid],
+          purchasedDate: it[TableCars.purchasedDate],
+          dealershipId: it[TableCars.dealershipId],
+        ),
+      );
+    }
+    return list;
+  }
+
   Future<void> insert(Car car) async {
     final dataBase = await getDatabase();
     final map = TableCars.toMap(car);
@@ -244,13 +324,12 @@ class TableSales {
       $dealershipCut  REAL NOT NULL,
       $businessCut    REAL NOT NULL,
       $safetyCut      REAL NOT NULL,
-      
+
       $dealershipId   INTEGER NOT NULL,
       $userId         INTEGER NOT NULL
     );
   ''';
 
-  // $vehicleId      INTERGER NOT NULL,
   static const String tableName = 'sale';
   static const String id = 'id';
   static const String customerCpf = 'customer_cpf';
@@ -284,6 +363,37 @@ class TableSales {
 }
 
 class SalesController {
+  Future<List<Sale>> selectByDealership(int dealershipId) async {
+    final database = await getDatabase();
+
+    final List<Map<String, dynamic>> result = await database.query(
+      TableSales.tableName,
+      where: '${TableSales.dealershipId} = ?',
+      whereArgs: [dealershipId],
+    );
+
+    var list = <Sale>[];
+
+    for (final it in result) {
+      list.add(
+        Sale(
+          id: it[TableSales.id],
+          customerCpf: it[TableSales.customerCpf],
+          customerName: it[TableSales.customerName],
+          soldDate: it[TableSales.soldWhen],
+          priceSold: it[TableSales.priceSold],
+          dealershipCut: it[TableSales.dealershipCut],
+          businessCut: it[TableSales.businessCut],
+          safetyCut: it[TableSales.safetyCut],
+          //vehicleId: it[TableSales.vehicleId],
+          dealershipId: it[TableSales.dealershipId],
+          userId: it[TableSales.userId],
+        ),
+      );
+    }
+    return list;
+  }
+
   Future<void> insert(Sale sale) async {
     final dataBase = await getDatabase();
     final map = TableSales.toMap(sale);

@@ -16,99 +16,104 @@ class RegisterCarsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userlogged = ModalRoute.of(context)!.settings.arguments as User;
-    final stateCar = Provider.of<CarState>(context);
-    stateCar.setLoggedUser(userlogged);
-    return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Color(0xff00456A),
-                Color(0xff051937),
-              ],
+    return ChangeNotifierProvider(
+      create: (context) => CarState(userlogged),
+      child: Consumer<CarState>(builder: (context, stateCar, value) {
+        return Scaffold(
+          appBar: AppBar(
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                    Color(0xff00456A),
+                    Color(0xff051937),
+                  ],
+                ),
+              ),
+            ),
+            title: const Text('Registre Seu Veículo'),
+          ),
+          drawer: const DrawerMenu(),
+          body: Form(
+            key: stateCar.formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const AppHeader(header: 'Brand'),
+                  const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: _BrandTextField(),
+                  ),
+                  const AppHeader(header: 'Model'),
+                  const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: _ModelTextField(),
+                  ),
+                  const AppHeader(header: 'Plate'),
+                  const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: _PlateTextField(),
+                  ),
+                  const AppHeader(header: 'Built Year'),
+                  const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: _BuiltYearTextField(),
+                  ),
+                  const AppHeader(header: 'Model Year'),
+                  const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: _ModelYearTextField(),
+                  ),
+                  const AppHeader(header: 'Price'),
+                  const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: _PriceTextField(),
+                  ),
+                  const AppHeader(header: 'Date of purchase'),
+                  const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: _DateTextField(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: stateCar.controllerPhoto != null
+                        ? const PhotosList()
+                        : Container(),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: ChooseOrTakePhoto(),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (stateCar.formKey.currentState!.validate()) {
+                        if (stateCar.oldCar != null) {
+                          stateCar.updateCar;
+                          await stateCar.update();
+                        } else {
+                          await stateCar.insert();
+                        }
+                        if (context.mounted) {
+                          await Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ShowCars(),
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    child: const Text('Cadastrar'),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        title: const Text('Registre Seu Veículo'),
-      ),
-      drawer: const DrawerMenu(),
-      body: Form(
-        key: stateCar.formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const AppHeader(header: 'Brand'),
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: _BrandTextField(),
-              ),
-              const AppHeader(header: 'Model'),
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: _ModelTextField(),
-              ),
-              const AppHeader(header: 'Plate'),
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: _PlateTextField(),
-              ),
-              const AppHeader(header: 'Built Year'),
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: _BuiltYearTextField(),
-              ),
-              const AppHeader(header: 'Model Year'),
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: _ModelYearTextField(),
-              ),
-              const AppHeader(header: 'Price'),
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: _PriceTextField(),
-              ),
-              const AppHeader(header: 'Date of purchase'),
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: _DateTextField(),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: stateCar.controllerPhoto != null
-                    ? const PhotosList()
-                    : Container(),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: ChooseOrTakePhoto(),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (stateCar.oldCar != null) {
-                    stateCar.updateCar;
-                    await stateCar.update();
-                  } else {
-                    await stateCar.insert();
-                  }
-                  if (context.mounted) {
-                    await Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ShowCars(),
-                      ),
-                    );
-                  }
-                },
-                child: const Text('Cadastrar'),
-              ),
-            ],
-          ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }
@@ -230,7 +235,7 @@ class _PriceTextField extends StatelessWidget {
   const _PriceTextField();
 
   String? validator(String? value) {
-    if (double.parse((value!.replaceAll(RegExp(r','), ''))) == 0.00) {
+    if (double.parse((value!.replaceAll(RegExp(r','), ''))) == 0.0) {
       return 'Preço não pode ser zero';
     }
     return null;
@@ -251,8 +256,8 @@ class _DateTextField extends StatelessWidget {
   const _DateTextField();
 
   String? validator(String? value) {
-    if (value!.isEmpty) {
-      return 'Informe a data correta';
+    if (double.parse((value!.replaceAll(RegExp(r'/'), ''))) == 10 / 10 / 2010) {
+      return 'Preço não pode ser zero';
     }
     return null;
   }
@@ -264,6 +269,7 @@ class _DateTextField extends StatelessWidget {
       controller: stateCar.controllerPurchaseDate,
       validator: validator,
       hint: '12/12/2012',
+      inputType: TextInputType.datetime,
     );
   }
 }
