@@ -86,6 +86,15 @@ class DrawerMenu extends StatelessWidget {
                 },
               ),
               ListTile(
+                title: showTittle('Gerenciar Vendas'),
+                subtitle: const Text('Visualizar Vendas'),
+                leading: const Icon(Icons.shopping_bag),
+                iconColor: mainColor,
+                onTap: () async {
+                  //await Navigator.pushReplacementNamed(context, '/sales');
+                },
+              ),
+              ListTile(
                 title: showTittle('Veículos'),
                 subtitle: const Text('Registrar um Veículo'),
                 leading: const Icon(Icons.car_repair),

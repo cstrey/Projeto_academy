@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'controller/main_controller.dart';
+import 'controller/sale_infos.dart';
 import 'controller/user_controller.dart';
 import 'views/car_information.dart';
 import 'views/login_page.dart';
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => UserState(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SalesInfosState(),
         ),
       ],
       child: Consumer<MyState>(

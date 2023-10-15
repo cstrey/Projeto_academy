@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../controller/cars_controller.dart';
 import '../controller/main_controller.dart';
+import '../controller/sale_infos.dart';
 import '../controller/sales_controller.dart';
 import '../main.dart';
 import '../models/car.dart';
@@ -22,6 +23,7 @@ class ShowSales extends StatelessWidget {
     final numberFormatter = NumberFormat('###,###,###.00');
     final car = ModalRoute.of(context)!.settings.arguments as Car;
     final state = Provider.of<MyState>(context);
+    final stateInfo = Provider.of<SalesInfosState>(context);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -61,7 +63,7 @@ class ShowSales extends StatelessWidget {
                             final sale = stateSale.listSale[index];
                             return ListTile(
                               onTap: () async {
-                                stateSale.setSale(sale);
+                                stateInfo.setSale(sale);
                                 await Navigator.of(context)
                                     .pushReplacementNamed(
                                   '/salesInfos',

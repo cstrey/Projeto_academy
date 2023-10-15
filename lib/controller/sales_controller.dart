@@ -130,18 +130,6 @@ class SaleState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Sale? _selectSale;
-
-  /// Getter method, loggedUser, returns the
-  /// value of a private variable _loggedUser.
-  Sale? get selectSale => _selectSale;
-
-  void setSale(Sale sale) async {
-    _selectSale = sale;
-
-    notifyListeners();
-  }
-
   /// this code adjusts the values of
   /// [dealershipCut], [businessCut], and [safetyCut] based on the value
   /// of [loggedUser.autonomy], effectively applying different percentage
