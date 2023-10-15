@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../controller/user_controller.dart';
 
-enum DropOpcoes {
-  iniciante,
-  intermediario,
-  avancado,
-  especial,
-}
-
+/// Declaration of a widget class named [DropMenu]
+/// that extends StatelessWidget.
 class DropMenu extends StatelessWidget {
+  /// Define a constructor [DropMenu].
   DropMenu({super.key});
 
+  /// Defines a variable named [dropOpcoes] as a constant list.
   final dropOpcoes = ['Iniciante', 'Intermediario', 'Avançado', 'Especial'];
 
   @override

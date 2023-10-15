@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controller/user_controller.dart';
+import '../main.dart';
 import 'register_page.dart';
 import 'utils/menu_drawer.dart';
 
+/// Declaration of a widget class named [ShowUsers]
+/// that extends StatelessWidget.
 class ShowUsers extends StatelessWidget {
+  /// Define a constructor [ShowUsers].
   const ShowUsers({
     super.key,
   });
-
-  final String title = 'Anderson Automóveis';
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class ShowUsers extends StatelessWidget {
             ),
           ),
         ),
-        title: Text(title),
+        title: const Text(title),
       ),
       body: ListView.builder(
         itemCount: stateUser.listUser.length,

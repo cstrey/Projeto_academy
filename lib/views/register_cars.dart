@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controller/cars_controller.dart';
-import '../models/user.dart';
+import '../controller/main_controller.dart';
 import 'show_cars.dart';
 import 'utils/auto_complete.dart';
 import 'utils/choose_take_photo.dart';
@@ -10,14 +10,17 @@ import 'utils/header.dart';
 import 'utils/menu_drawer.dart';
 import 'utils/photo_list.dart';
 
+/// Declaration of a widget class named [RegisterCarsPage]
+/// that extends StatelessWidget.
 class RegisterCarsPage extends StatelessWidget {
+  /// Define a constructor [RegisterCarsPage].
   const RegisterCarsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final userlogged = ModalRoute.of(context)!.settings.arguments as User;
+    final state = Provider.of<MyState>(context);
     return ChangeNotifierProvider(
-      create: (context) => CarState(userlogged),
+      create: (context) => CarState(state.loggedUser!),
       child: Consumer<CarState>(builder: (context, stateCar, value) {
         return Scaffold(
           appBar: AppBar(

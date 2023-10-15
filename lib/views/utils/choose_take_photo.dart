@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../controller/cars_controller.dart';
 
+/// Declaration of a widget class named [ChooseOrTakePhoto]
+/// that extends StatelessWidget.
 class ChooseOrTakePhoto extends StatelessWidget {
+  /// Define a constructor [ChooseOrTakePhoto].
   const ChooseOrTakePhoto({super.key});
 
   @override

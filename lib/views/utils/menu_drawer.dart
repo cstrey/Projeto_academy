@@ -4,14 +4,19 @@ import '../../controller/main_controller.dart';
 import '../../controller/user_controller.dart';
 import '../../main.dart';
 
+/// Declaration of a widget class named [DrawerMenu]
+/// that extends StatelessWidget.
 class DrawerMenu extends StatelessWidget {
+  /// Define a constructor [DrawerMenu].
   const DrawerMenu({
     super.key,
   });
 
-  Text showTittle(String texto) {
+  /// Defines a function named [showTitle] that takes a single
+  /// argument [text], which is a string.
+  Text showTittle(String text) {
     return Text(
-      texto,
+      text,
       style: const TextStyle(fontSize: 18),
     );
   }
@@ -78,15 +83,6 @@ class DrawerMenu extends StatelessWidget {
                 iconColor: mainColor,
                 onTap: () async {
                   await Navigator.pushReplacementNamed(context, '/cars');
-                },
-              ),
-              ListTile(
-                title: showTittle('Gerenciar Vendas'),
-                subtitle: const Text('Visualizar Vendas'),
-                leading: const Icon(Icons.shopping_bag),
-                iconColor: mainColor,
-                onTap: () async {
-                  await Navigator.pushReplacementNamed(context, '/sales');
                 },
               ),
               ListTile(

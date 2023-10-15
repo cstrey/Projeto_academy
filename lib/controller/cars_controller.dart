@@ -7,28 +7,37 @@ import '../models/user.dart';
 import 'api_controller.dart';
 import 'database.dart';
 
+/// Class used to manage and update the state related to [car] data.
 class CarState extends ChangeNotifier {
+  /// Class is initialized with a required [loggedUser],
+  /// which is an instance of the [User] class.
   CarState(this.loggedUser) {
     init();
   }
 
+  /// Declares a final variable named [loggedUser] of the type [User].
   final User loggedUser;
 
   Car? _oldCar;
 
   final _listCar = <Car>[];
 
+  /// Create a variable [car] which is not initialized
   Car? car;
 
+  /// This variable can be used to track whether something is currently
+  /// in a [loading] state,
   bool loading = true;
 
   String? _controllerPhoto;
 
   int? _dealershipController;
 
+  /// Creates an instance of a [CarsController] class.
   final controller = CarsController();
+
+  /// Defines a formKey variable of type [GlobalKey<FormState>].
   final formKey = GlobalKey<FormState>();
-  final _controllerCar = TextEditingController();
   final _controllerModel = TextEditingController();
   final _controllerPlate = TextEditingController();
   final _controllerBrand = TextEditingController();
@@ -40,36 +49,54 @@ class CarState extends ChangeNotifier {
   );
   final _controllerPurchaseDate = TextEditingController();
 
-  TextEditingController get controllerCar => _controllerCar;
-
+  /// Used for managing the [car] model information.
   TextEditingController get controllerModel => _controllerModel;
 
+  /// Used for managing the [car] plate information.
   TextEditingController get controllerPlate => _controllerPlate;
 
+  /// Used for managing the [car] brand information.
   TextEditingController get controllerBrand => _controllerBrand;
 
+  /// Used for managing the [car] built year information.
   TextEditingController get controllerBuiltYear => _controllerBuiltYear;
 
+  /// Used for managing the [car] model year information.
   TextEditingController get controllerModelYear => _controllerModelYear;
 
+  /// Used for managing the price paid in [car] information.
   MoneyMaskedTextController get controllerPricePaid => _controllerPricePaid;
 
+  /// Used for managing the [car] purschase date information.
   TextEditingController get controllerPurchaseDate => _controllerPurchaseDate;
 
+  /// Used for managing the [car] photo information.
   String? get controllerPhoto => _controllerPhoto;
 
+  /// Keeps a record of the a old [car] data
   Car? get oldCar => _oldCar;
 
+  /// Used to load a list of [Car] objects
   List<Car> get listCar => _listCar;
 
+  /// allows retrieve the value of a [_dealershipController].
   int? get dealershipController => _dealershipController;
 
+  /// Sets up a focus listener.
   final modelFieldFocusNode = FocusNode();
+
+  /// Sets up a focus listener.
   final brandFieldFocusNode = FocusNode();
 
+  /// Variable is declared as a List of String.
   final allBrands = <String>[];
+
+  /// Variable is also declared as a List of String.
   final allModels = <String>[];
 
+  /// loads some data, retrieves [brand] names,
+  /// listens for focus changes on a particular field,
+  /// and performs actions accordingly.
   void init() async {
     loading = true;
     await loadData();
@@ -90,6 +117,7 @@ class CarState extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Sets a dealership controller to the user's [ID], then loads some data
   void setDealership(User user) async {
     _dealershipController = user.id!;
     await loadData();
@@ -97,6 +125,7 @@ class CarState extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Return a list of [brand] names as strings.
   Future<List<String>?> getBrandNames() async {
     final brandsList = await getCarBrands();
 
@@ -110,6 +139,8 @@ class CarState extends ChangeNotifier {
     return brandNames;
   }
 
+  /// Retrieves a list of [car models] for a given brand, extracts their names,
+  /// and returns them as a list of strings.
   Future<List<String>?> getModelsByBrand(String brand) async {
     final modelsList = await getCarModel(brand);
 
@@ -123,6 +154,7 @@ class CarState extends ChangeNotifier {
     return modelNames;
   }
 
+  /// Used to insert a new [car] in dataBase.
   Future<void> insert() async {
     final car = Car(
       model: controllerModel.text,
@@ -153,28 +185,23 @@ class CarState extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Fetches a list of [cars] based on the [user's] id and updates
+  /// the list displayed in the screen.
   Future<void> loadData() async {
-    loading = true;
+    final list = <Car>[];
+    if (loggedUser.id != 1) {
+      list.addAll(await controller.selectByDealership(loggedUser.id!));
+    } else {
+      list.addAll(await controller.select());
+    }
 
-    var dealershipId = 0;
-
-    loggedUser.id == 1
-        ? dealershipId = _dealershipController ?? 1
-        : dealershipId = loggedUser.id!;
-
-    final result = await controller.selectByDealership(dealershipId);
-
-    result.removeWhere((element) => element.isSold == true);
-
-    _listCar
-      ..clear()
-      ..addAll(result.reversed);
-
-    loading = false;
+    listCar.clear();
+    listCar.addAll(list);
 
     notifyListeners();
   }
 
+  /// Delete a [Car].
   Future<void> delete(Car car) async {
     await controller.delete(car);
     await loadData();
@@ -182,6 +209,8 @@ class CarState extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Updates the internal text controllers with the values
+  /// from the [car] object and creates an _oldCar object
   void updateCar(Car car) {
     _controllerModel.text = car.model;
     _controllerPlate.text = car.plate;
@@ -208,6 +237,7 @@ class CarState extends ChangeNotifier {
     );
   }
 
+  /// This function is used to update information related to a [Car] object.
   Future<void> update() async {
     final updateCar = Car(
       id: _oldCar!.id,
@@ -238,6 +268,8 @@ class CarState extends ChangeNotifier {
     await loadData();
   }
 
+  /// picking an image from the gallery, updating the [_controllerPhoto]
+  /// with the selected image's path,
   Future pickImage() async {
     {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -248,6 +280,8 @@ class CarState extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// used to take a photo using the device's camera,
+  /// updating the [_controllerPhoto] with the selected image's path,
   Future takePhoto() async {
     {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);

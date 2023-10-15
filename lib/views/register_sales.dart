@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../controller/main_controller.dart';
 import '../controller/sales_controller.dart';
-import '../models/user.dart';
-import 'show_sales.dart';
+import '../models/car.dart';
 import 'utils/form.dart';
 import 'utils/header.dart';
 import 'utils/menu_drawer.dart';
 
+/// Declaration of a widget class named [RegisterSalePage]
+/// that extends StatelessWidget.
 class RegisterSalePage extends StatelessWidget {
+  /// Define a constructor [RegisterCarsPage].
   const RegisterSalePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final userLogged = ModalRoute.of(context)!.settings.arguments as User;
+    final car = ModalRoute.of(context)!.settings.arguments as Car;
+    final state = Provider.of<MyState>(context);
     return ChangeNotifierProvider(
-      create: (context) => SaleState(userLogged),
+      create: (context) => SaleState(state.loggedUser!),
       child: Consumer<SaleState>(
         builder: (context, stateSale, value) {
           return Scaffold(
@@ -66,19 +70,12 @@ class RegisterSalePage extends StatelessWidget {
                         onPressed: () async {
                           final pricePaid = stateSale.controllerPriceSold.text;
                           await stateSale.autonomy(double.parse(pricePaid));
-
-                          if (stateSale.oldSale != null) {
-                            stateSale.updateSale;
-                            await stateSale.update();
-                          } else {
-                            await stateSale.insert();
-                          }
+                          await stateSale.insert();
                           if (context.mounted) {
-                            await Navigator.push(
+                            await Navigator.pushReplacementNamed(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => const ShowSales(),
-                              ),
+                              '/sales',
+                              arguments: car,
                             );
                           }
                         },

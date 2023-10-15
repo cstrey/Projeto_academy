@@ -1,7 +1,10 @@
 import 'package:easy_autocomplete/easy_autocomplete.dart';
 import 'package:flutter/material.dart';
 
+/// Declaration of a widget class named [AppTextFieldAutoComplete]
+/// that extends StatelessWidget.
 class AppTextFieldAutoComplete extends StatelessWidget {
+  /// Define a constructor [AppTextFieldAutoComplete].
   const AppTextFieldAutoComplete({
     required this.suggestions,
     required this.controller,
@@ -10,9 +13,16 @@ class AppTextFieldAutoComplete extends StatelessWidget {
     super.key,
   });
 
+  /// Declares a variable [suggestions] with the type List<String>.
   final List<String> suggestions;
+
+  /// Declares a variable [controller] with the type TextEditingController.
   final TextEditingController controller;
+
+  /// Declares a variable [validator] with the type String that can be null.
   final String? Function(String?)? validator;
+
+  /// Declares a variable [focusNode] with the type FocusNode that can be null.
   final FocusNode? focusNode;
 
   @override

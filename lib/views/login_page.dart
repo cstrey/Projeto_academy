@@ -5,7 +5,10 @@ import '../controller/user_controller.dart';
 import 'utils/form.dart';
 import 'utils/header.dart';
 
+/// Declaration of a widget class named [LoginPage]
+/// that extends StatelessWidget.
 class LoginPage extends StatelessWidget {
+  /// Define a constructor [LoginPage].
   const LoginPage({super.key});
 
   @override

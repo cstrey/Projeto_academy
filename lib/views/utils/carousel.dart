@@ -1,7 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
+/// Declaration of a widget class named [Carousel]
+/// that extends StatelessWidget.
 class Carousel extends StatefulWidget {
+  /// Define a constructor [Carousel].
   const Carousel({Key? key}) : super(key: key);
 
   @override

@@ -7,7 +7,10 @@ import 'utils/form.dart';
 import 'utils/header.dart';
 import 'utils/menu_drawer.dart';
 
+/// Declaration of a widget class named [RegisterPage]
+/// that extends StatelessWidget.
 class RegisterPage extends StatelessWidget {
+  /// Define a constructor [RegisterPage].
   const RegisterPage({super.key});
 
   @override
